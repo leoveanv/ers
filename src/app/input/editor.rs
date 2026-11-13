@@ -1,6 +1,9 @@
+mod vim;
+
 use crate::configuration::InputKey;
 use crate::document::text::cell_width;
 use unicode_segmentation::UnicodeSegmentation;
+use vim::VimState;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum EditorAction {
@@ -48,6 +51,7 @@ pub struct EditorState {
     focus: usize,
     options: EditorOptions,
     boundaries: Vec<usize>,
+    vim: Option<VimState>,
 }
 
 impl EditorState {
@@ -66,6 +70,7 @@ impl EditorState {
             focus: 0,
             options,
             boundaries,
+            vim: None,
         }
     }
 
@@ -109,6 +114,13 @@ impl EditorState {
     }
 
     pub fn handle(&mut self, key: InputKey) -> Option<EditorAction> {
+        if self.handle_vim(key) {
+            return None;
+        }
+        self.handle_plain(key)
+    }
+
+    fn handle_plain(&mut self, key: InputKey) -> Option<EditorAction> {
         match key {
             InputKey::Escape => return Some(EditorAction::Cancel),
             InputKey::Tab => self.focus = (self.focus + 1) % (self.buttons().len() + 1),
@@ -163,6 +175,7 @@ impl EditorState {
     }
 
     fn replace(&mut self, start: usize, end: usize, value: &str) {
+        self.record_change();
         let index = self
             .boundaries
             .partition_point(|boundary| *boundary < start)

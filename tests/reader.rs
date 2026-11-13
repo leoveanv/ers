@@ -112,12 +112,32 @@ fn canceling_a_note_does_not_emit_a_database_mutation() {
         reader.handle_key(InputKey::Character(key));
     }
     reader.handle_paste("Unsaved draft\nSecond line");
-    assert!(reader.handle_key(InputKey::Escape).is_empty());
+    for key in [InputKey::Tab, InputKey::Tab, InputKey::Enter] {
+        assert!(reader.handle_key(key).is_empty());
+    }
     assert!(matches!(
         reader.view().mode,
         ReaderMode::Annotations(AnnotationMode::Selecting(_))
     ));
     assert!(reader.view().info.annotations.is_empty());
+}
+
+#[test]
+fn note_normal_mode_edits_the_draft_without_leaving_the_dialog() {
+    use ers::app::ReaderMode;
+    use ers::app::modes::annotations::AnnotationMode;
+    let mut reader = reader();
+    for key in ['v', ' ', 'w', 'n'] {
+        reader.handle_key(InputKey::Character(key));
+    }
+    reader.handle_paste("first second");
+    for key in "\u{1b}bix".chars() {
+        assert!(reader.handle_key(InputKey::from_character(key)).is_empty());
+    }
+    let ReaderMode::Annotations(AnnotationMode::Editing(editor)) = reader.view().mode else {
+        panic!("Vim commands must retain the note draft");
+    };
+    assert_eq!(editor.state.text(), "first xsecond");
 }
 
 #[test]

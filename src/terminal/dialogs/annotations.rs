@@ -21,7 +21,7 @@ pub(in crate::terminal) fn status_hint(model: &ReaderModel) -> Option<String> {
     };
     Some(match mode {
         AnnotationMode::Selecting(_) => "Select: hjkl/arrows  w/b words  Ctrl-U/D half page  Space start  Enter save  n note  d delete  v/Esc exit".into(),
-        AnnotationMode::Editing(_) => "Note | Enter newline  Tab controls  Esc cancel".into(),
+        AnnotationMode::Editing(editor) => note_editor_hint(editor),
         AnnotationMode::QuitNote(_) => "Discard unsaved note and quit? y confirms; any other key keeps the draft".into(),
         AnnotationMode::List { .. } => "Annotations | Enter jump  e edit  d delete  f read note  r copy  Esc close".into(),
         AnnotationMode::Choosing(_) => "Overlapping highlights | j/k choose  Enter select  Esc cancel".into(),
@@ -473,6 +473,15 @@ pub(in crate::terminal) fn draw_overlay(
     }
 }
 
+fn note_editor_hint(editor: &NoteEditor) -> String {
+    let keys = if editor.state.mode_label() == "NORMAL" {
+        "i insert  u undo  Ctrl-R redo  Tab controls"
+    } else {
+        "Enter newline  Esc normal  Tab controls"
+    };
+    format!("Note | {} | {keys}", editor.state.mode_label())
+}
+
 fn draw_editor(frame: &mut Frame<'_>, editor: &NoteEditor, style: Style) {
     let area = frame.area();
     let height = area.height.saturating_sub(2).min(11);
@@ -485,7 +494,7 @@ fn draw_editor(frame: &mut Frame<'_>, editor: &NoteEditor, style: Style) {
     );
     frame.render_widget(Clear, rectangle);
     let block = Block::default()
-        .title("Note | Enter newline  Tab controls  Esc cancel")
+        .title(note_editor_hint(editor))
         .borders(Borders::ALL)
         .style(style);
     let inside = block.inner(rectangle);

@@ -68,7 +68,9 @@ Annotations are available for local EPUB books and do not modify the ebook.
 
 1. Press `v` to enter selection mode, then move with `h/j/k/l` or the arrow keys.
 2. Press Space to start a selection and move to its inclusive end. Press Enter to save a highlight, or `n` to add a note.
-3. In the note editor, Enter inserts a newline. Press Tab to select **Save**, then Enter to commit. Press `v` or Esc to leave selection mode.
+3. Notes open in **INSERT** mode, where Enter inserts a newline. Esc switches to **NORMAL** mode without closing the draft. Press Tab to select **Save**, then Enter to commit, or select **Cancel** to discard. Press `v` or Esc to leave selection mode.
+
+In note NORMAL mode, use `h/j/k/l` to move, `w/b/e` for words, and `0/$` for line boundaries. Use `i/a` to insert before/after the cursor, `I/A` at the first nonblank character/line end, and `o/O` to open a line below/above. `x` deletes a character, `dd` deletes a line, `u` undoes, and Ctrl-R redoes. Each INSERT session forms one undo step. Motions follow logical lines, including when text wraps on screen. Counts, text objects, registers, and repeat commands are not supported.
 
 Press `a` to open the annotation list. Select a highlight and press Enter to jump, `e` to edit its note, `f` to read it, or `d` to delete it after confirmation. Press `r` to copy annotations from another identity after validating their exact positions.
 

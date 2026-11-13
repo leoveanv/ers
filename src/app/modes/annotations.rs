@@ -542,7 +542,8 @@ impl ReaderModel {
                 multiline: true,
                 can_delete: matches!(target, NoteTarget::Existing(_)),
             },
-        );
+        )
+        .with_vim();
         self.mode = ReaderMode::Annotations(AnnotationMode::editing(NoteEditor {
             state,
             target,
