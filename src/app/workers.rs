@@ -2,7 +2,6 @@ mod annotation_writes;
 mod commands;
 mod document_cache;
 mod hyperlinks;
-mod library;
 mod link_writes;
 mod reassociation;
 mod search;

@@ -1,4 +1,4 @@
-use crate::book::epub::join_resource;
+use crate::book::resource_path::join_resource;
 use crate::book::xml::parse_xml;
 use crate::document::clean_page_label;
 use crate::{Error, Result};

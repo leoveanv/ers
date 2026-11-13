@@ -9,12 +9,10 @@ mod page_turn;
 pub mod requests;
 pub mod runtime;
 mod session;
-mod session_memory;
 pub mod workers;
 
 pub use effects::ReaderEffect;
 pub use input::{ModalInput, editor};
 use model::QueuedInput;
 pub use model::{Dialog, DialogItem, JumpTarget, ReaderMode, ReaderModel, ReaderView, Viewport};
-pub use session::{BookInfo, ReaderSession};
-pub use session_memory::BookSessionMemory;
+pub use session::{BookInfo, BookSessionMemory, ReaderSession};

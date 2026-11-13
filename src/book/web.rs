@@ -1,7 +1,7 @@
 use super::BookMetadata;
 use super::BookNavigation;
-use super::dispatch::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions, ResourceTarget};
 use super::location::validate_web_url;
+use super::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions, ResourceTarget};
 use crate::cancellation::Cancellation;
 use crate::document::html::{HtmlToken, HtmlTokenizer, unescape_html};
 use crate::{Error, Result};

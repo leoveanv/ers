@@ -1,10 +1,8 @@
-mod animation;
 mod dialogs;
 mod graphics;
 mod highlights;
 mod hyperlink_cues;
 mod input;
-mod mouse;
 pub mod page_animation;
 mod render;
 mod session;
@@ -21,12 +19,12 @@ use crate::app::Viewport;
 use crate::app::runtime::{ReaderLaunch, ReaderRuntime};
 use crate::book::BookLocation;
 use crate::configuration::{Command, Configuration, InputKey};
-use animation::RunningAnimation;
 use crossterm::event::{Event, KeyEventKind};
 use crossterm::{event, terminal};
 use graphics::{inline as inline_images, preview as images, support as image_support};
 use image_support::ImageSupportDetector;
-use input::input_key;
+use input::{MouseTracker, input_key};
+use page_animation::RunningAnimation;
 use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
 use render::draw;
@@ -197,7 +195,7 @@ fn reader_loop(launch: TerminalLaunch, modes: Arc<std::sync::Mutex<TerminalModes
     let mut last_frame = Instant::now() - Duration::from_secs(1);
     let mut last_input = Instant::now();
     let mut animation = None::<RunningAnimation>;
-    let mut mouse_tracker = mouse::MouseTracker::default();
+    let mut mouse_tracker = MouseTracker::default();
     let result = (|| {
         loop {
             dirty |= runtime.poll()?;

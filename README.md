@@ -8,7 +8,7 @@
 
 ## Install
 
-Install Rust 1.91 or newer and the macOS command-line developer tools, then run from this checkout:
+Install Rust 1.100 or newer and the macOS command-line developer tools, then run from this checkout:
 
 ```sh
 cargo install --locked --path .

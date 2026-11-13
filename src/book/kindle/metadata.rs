@@ -1,4 +1,4 @@
-use super::extended::extended_records;
+use super::header::extended_records;
 use super::number;
 use crate::book::BookMetadata;
 use crate::{Error, Result};

@@ -1,4 +1,4 @@
-use super::svg::ImageDecoder;
+use super::loader::ImageDecoder;
 use super::{DecodedImage, ImageTarget};
 use crate::book::{Book, BookLocation, BookOpenOptions};
 use crate::cancellation::Cancellation;

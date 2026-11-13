@@ -1,13 +1,13 @@
 mod lowercase;
-mod models;
 mod native;
-pub use models::{SearchDirection, SearchJob, SearchResult, SearchSelection};
 mod projection;
 mod syntax;
 
 use crate::cancellation::Cancellation;
+use crate::document::RenderedDocument;
 use crate::document::layout::TextLayout;
 use crate::{Error, Result};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 #[derive(Clone, Copy, Debug)]
@@ -48,6 +48,38 @@ pub struct SearchHit {
 pub struct DocumentMatches {
     pub content_id: String,
     pub hits: Vec<SearchHit>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SearchDirection {
+    Forward,
+    Backward,
+}
+
+#[derive(Clone)]
+pub struct SearchJob {
+    pub request_id: u64,
+    pub pattern: String,
+    pub contents: Arc<[String]>,
+    pub current: Arc<RenderedDocument>,
+    pub start_row: usize,
+    pub start_offset: Option<usize>,
+    pub after_hit: Option<usize>,
+    pub direction: SearchDirection,
+    pub count: usize,
+}
+
+#[derive(Clone, Debug)]
+pub struct SearchSelection {
+    pub document: Arc<RenderedDocument>,
+    pub matches: DocumentMatches,
+    pub selected: usize,
+    pub exhausted: bool,
+}
+
+pub struct SearchResult {
+    pub request_id: u64,
+    pub result: std::result::Result<Option<SearchSelection>, String>,
 }
 
 pub struct SearchPattern {

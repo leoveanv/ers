@@ -1,6 +1,5 @@
 mod compression;
 mod container;
-mod extended;
 mod flows;
 mod header;
 mod huff_decoder;
@@ -11,7 +10,7 @@ mod resources;
 mod source;
 
 use super::TocEntry;
-use super::dispatch::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions};
+use super::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions};
 use crate::book::BookNavigation;
 use crate::{Error, Result};
 use boko::Importer;

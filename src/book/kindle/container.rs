@@ -1,6 +1,5 @@
-use super::extended::extended_records;
 use super::flows::read_flows;
-use super::header::{Compression, MobiHeader, NULL_INDEX};
+use super::header::{Compression, MobiHeader, NULL_INDEX, extended_records};
 use super::huffman::load_dictionary;
 use super::metadata::decode_metadata;
 use super::number;

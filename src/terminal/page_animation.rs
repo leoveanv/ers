@@ -1,10 +1,81 @@
-use super::PageDirection;
+use std::time::{Duration, Instant};
+
 use crate::document::text::cell_width;
 use ratatui::buffer::{Buffer, Cell, CellDiffOption};
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 
-pub(super) struct PaneSlide {
+use crate::reading::PageDirection;
+
+pub struct PagePane {
+    pub area: Rect,
+    pub style: Style,
+}
+
+pub struct PageAnimation {
+    direction: PageDirection,
+    duration: Duration,
+}
+
+impl PageAnimation {
+    pub fn new(direction: PageDirection, width: u16) -> Self {
+        // #NOTE: The old slide used one millisecond per column; the cap leaves room for frame scheduling within the 100 ms settling target.
+        Self {
+            direction,
+            duration: Duration::from_millis(u64::from(width.min(64))),
+        }
+    }
+
+    pub fn is_finished(&self, elapsed: Duration) -> bool {
+        elapsed >= self.duration
+    }
+
+    pub fn paint(&self, buffer: &mut Buffer, panes: &[PagePane], elapsed: Duration) {
+        if self.is_finished(elapsed) {
+            return;
+        }
+        for pane in panes {
+            let area = pane.area.intersection(buffer.area);
+            let exposed =
+                (u128::from(area.width) * elapsed.as_nanos() / self.duration.as_nanos()) as u16;
+            paint_pane(
+                buffer,
+                PaneSlide {
+                    area,
+                    style: pane.style,
+                    exposed,
+                    direction: self.direction,
+                },
+            );
+        }
+    }
+}
+
+pub(super) struct RunningAnimation {
+    page: PageAnimation,
+    started: Instant,
+}
+
+impl RunningAnimation {
+    pub fn new(direction: PageDirection, width: u16, now: Instant) -> Self {
+        Self {
+            page: PageAnimation::new(direction, width),
+            started: now,
+        }
+    }
+
+    pub fn is_finished(&self, now: Instant) -> bool {
+        self.page
+            .is_finished(now.saturating_duration_since(self.started))
+    }
+
+    pub fn paint(&self, buffer: &mut Buffer, panes: &[PagePane], now: Instant) {
+        self.page
+            .paint(buffer, panes, now.saturating_duration_since(self.started));
+    }
+}
+
+struct PaneSlide {
     pub area: Rect,
     pub style: Style,
     pub exposed: u16,
@@ -19,7 +90,7 @@ struct RowSlide {
     destination_start: u16,
 }
 
-pub(super) fn paint_pane(buffer: &mut Buffer, slide: PaneSlide) {
+fn paint_pane(buffer: &mut Buffer, slide: PaneSlide) {
     if has_graphics(buffer, slide.area) {
         return;
     }

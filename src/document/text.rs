@@ -84,10 +84,9 @@ impl ImageVariant {
         classes.split_whitespace().find_map(|class| {
             let (group, platform) = if let Some(group) = class.strip_suffix("-epub") {
                 (group, ImagePlatform::Epub)
-            } else if let Some(group) = class.strip_suffix("-amzn") {
-                (group, ImagePlatform::Amazon)
             } else {
-                return None;
+                let group = class.strip_suffix("-amzn")?;
+                (group, ImagePlatform::Amazon)
             };
             Some(Self {
                 group: group.into(),

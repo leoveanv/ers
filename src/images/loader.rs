@@ -1,5 +1,4 @@
-use super::process::decode_isolated;
-use super::validation::{svg_error, validate_svg};
+use super::svg::{decode_isolated, svg_error, validate_svg};
 use super::{ImageWorkerOptions, SvgDecodeOptions};
 use crate::Result;
 use crate::book::{Book, BookKind};
@@ -7,7 +6,7 @@ use crate::cancellation::Cancellation;
 use crate::images::{DecodedImage, ImageLimits, decode_image};
 use std::sync::Arc;
 
-pub(in crate::images) struct ImageDecoder {
+pub(super) struct ImageDecoder {
     options: ImageWorkerOptions,
 }
 

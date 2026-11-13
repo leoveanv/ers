@@ -108,7 +108,9 @@ impl RecordSource {
         }
         let table = source.read_at(78, count * 8)?;
         let mut offsets = table
-            .chunks_exact(8)
+            .as_chunks::<8>()
+            .0
+            .iter()
             .map(|entry| {
                 u32::from_be_bytes(
                     entry[..4]

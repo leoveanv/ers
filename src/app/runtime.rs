@@ -1,6 +1,5 @@
 mod effects;
 mod events;
-mod retirement;
 
 use std::collections::{BTreeMap, VecDeque};
 use std::path::PathBuf;
@@ -11,7 +10,7 @@ use crate::app::{BookSessionMemory, ReaderModel, Viewport};
 use crate::book::BookLocation;
 use crate::configuration::{Configuration, InputKey};
 use crate::reading::ReadingState;
-use retirement::RetiringJobs;
+use std::thread::JoinHandle;
 
 pub struct ReaderLaunch {
     pub image_decoder: PathBuf,
@@ -276,6 +275,31 @@ impl Drop for ReaderRuntime {
         self.jobs.stop();
         if let Some(opening) = &self.opening {
             opening.stop();
+        }
+    }
+}
+
+#[derive(Default)]
+struct RetiringJobs {
+    threads: Vec<JoinHandle<()>>,
+}
+
+impl RetiringJobs {
+    fn available(&mut self) -> bool {
+        self.threads.retain(|thread| !thread.is_finished());
+        self.threads.len() < 4
+    }
+
+    fn retire(&mut self, jobs: ReaderJobs) {
+        jobs.stop();
+        self.threads.push(std::thread::spawn(move || drop(jobs)));
+    }
+}
+
+impl Drop for RetiringJobs {
+    fn drop(&mut self) {
+        for thread in self.threads.drain(..) {
+            let _ = thread.join();
         }
     }
 }

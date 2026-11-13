@@ -26,7 +26,7 @@ fn validate_phrases(dictionary: &[u8], loaded: usize, expected: Option<usize>) -
     if dictionary.len() < table_end {
         return Err(invalid_dictionary());
     }
-    for offset in dictionary[16..table_end].chunks_exact(2) {
+    for offset in dictionary[16..table_end].as_chunks::<2>().0 {
         let position = 16 + u16::from_be_bytes([offset[0], offset[1]]) as usize;
         let length_bytes = dictionary
             .get(position..)

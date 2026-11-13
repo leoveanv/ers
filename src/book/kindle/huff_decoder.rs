@@ -39,7 +39,9 @@ fn prefixes(huff: &[u8]) -> Result<Vec<PrefixCode>> {
         .filter(|end| *end <= huff.len())
         .ok_or_else(invalid_huffman)?;
     huff[start..end]
-        .chunks_exact(4)
+        .as_chunks::<4>()
+        .0
+        .iter()
         .map(|bytes| {
             let entry = number(bytes, 0)?;
             let bits = (entry & 31) as usize;
@@ -85,7 +87,7 @@ impl HuffCdicReader {
             .ok_or_else(invalid_huffman)?;
         let mut minimum = vec![0];
         let mut maximum = vec![0];
-        for (index, bytes) in huff[start..end].chunks_exact(8).enumerate() {
+        for (index, bytes) in huff[start..end].as_chunks::<8>().0.iter().enumerate() {
             let bits = index + 1;
             minimum.push(number(bytes, 0)?.wrapping_shl((32 - bits) as u32));
             maximum.push(maximum_code(number(bytes, 4)?, bits));

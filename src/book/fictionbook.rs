@@ -1,6 +1,6 @@
 use super::BookNavigation;
-use super::dispatch::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions};
 use super::xml::parse_xml;
+use super::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions};
 use super::{BookMetadata, TocEntry};
 use crate::{Error, Result};
 use base64::{Engine, engine::general_purpose::STANDARD};

@@ -44,18 +44,7 @@ pub fn place_notes(notes: &[MarginInput], width: usize) -> Vec<PlacedNote> {
     notes
         .iter()
         .map(|note| {
-            let lines = note
-                .text
-                .split('\n')
-                .flat_map(|paragraph| {
-                    let lines = wrap_text(paragraph, width);
-                    if lines.is_empty() {
-                        vec![String::new()]
-                    } else {
-                        lines
-                    }
-                })
-                .collect::<Vec<_>>();
+            let lines = wrap_note_paragraphs(&note.text, width);
             let row = bottom.max(note.source_row);
             bottom = row + lines.len() + 1;
             PlacedNote {
@@ -63,6 +52,27 @@ pub fn place_notes(notes: &[MarginInput], width: usize) -> Vec<PlacedNote> {
                 source_row: note.source_row,
                 row,
                 lines,
+            }
+        })
+        .collect()
+}
+
+pub fn note_view_lines(quote: &str, note: &str, width: usize) -> Vec<String> {
+    let mut lines = vec!["Quotation".into(), String::new()];
+    lines.extend(wrap_note_paragraphs(quote, width));
+    lines.extend([String::new(), "Note".into(), String::new()]);
+    lines.extend(wrap_note_paragraphs(note, width));
+    lines
+}
+
+fn wrap_note_paragraphs(text: &str, width: usize) -> Vec<String> {
+    text.split('\n')
+        .flat_map(|paragraph| {
+            let lines = wrap_text(paragraph, width);
+            if lines.is_empty() {
+                vec![String::new()]
+            } else {
+                lines
             }
         })
         .collect()

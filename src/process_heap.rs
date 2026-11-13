@@ -20,7 +20,7 @@ impl ProcessAllocator {
     fn reserve(&self, bytes: usize) {
         let reserved = self
             .used
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |used| {
+            .try_update(Ordering::Relaxed, Ordering::Relaxed, |used| {
                 used.checked_add(bytes)
                     .filter(|total| *total <= self.limit.load(Ordering::Relaxed))
             });

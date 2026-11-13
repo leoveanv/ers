@@ -1,4 +1,6 @@
-use super::unescape_html;
+mod entities;
+
+pub(crate) use entities::unescape_html;
 
 #[derive(Debug)]
 pub(crate) struct HtmlAttribute {

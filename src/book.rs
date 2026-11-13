@@ -1,9 +1,67 @@
-use super::BookNavigation;
-use super::{BookLocation, BookMetadata, ResourceLimits, TocEntry};
+pub mod epub;
+mod fictionbook;
+mod kindle;
+mod location;
+mod navigation;
+mod resource_path;
+mod web;
+pub(crate) mod xml;
+
+pub use location::BookLocation;
+pub use navigation::{BookNavigation, NavigationPage, NavigationSection, parse_navigation};
+
 use crate::cancellation::Cancellation;
 use crate::{Error, Result};
 use percent_encoding::percent_decode_str;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct LibraryEntry {
+    pub last_read: String,
+    pub filepath: String,
+    pub title: Option<String>,
+    pub author: Option<String>,
+    pub reading_progress: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct BookMetadata {
+    pub title: Option<String>,
+    pub creator: Option<String>,
+    pub description: Option<String>,
+    pub publisher: Option<String>,
+    pub date: Option<String>,
+    pub language: Option<String>,
+    pub format: Option<String>,
+    pub identifier: Option<String>,
+    pub source: Option<String>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TocEntry {
+    pub label: String,
+    pub content_index: usize,
+    pub section: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct ResourceLimits {
+    pub resource_bytes_max: u64,
+    pub archive_bytes_max: u64,
+    pub archive_entries_max: usize,
+}
+
+impl Default for ResourceLimits {
+    fn default() -> Self {
+        Self {
+            resource_bytes_max: 32 * 1024 * 1024,
+            archive_bytes_max: 512 * 1024 * 1024,
+            archive_entries_max: 100_000,
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum BookKind {
@@ -58,7 +116,7 @@ pub(crate) trait BookBackend: Send {
         let content_id = if path.is_empty() {
             from.into()
         } else {
-            super::epub::join_resource(from, &path)?
+            resource_path::join_resource(from, &path)?
         };
         Ok(ResourceTarget {
             content_id,
@@ -104,8 +162,7 @@ impl Book {
                 (backend, BookLocation::Local(path), kind)
             }
             BookLocation::Web(url) => {
-                let backend =
-                    Box::new(super::web::WebBook::open(&url, &options)?) as Box<dyn BookBackend>;
+                let backend = Box::new(web::WebBook::open(&url, &options)?) as Box<dyn BookBackend>;
                 (backend, BookLocation::Web(url), BookKind::Web)
             }
         };
@@ -176,14 +233,12 @@ fn open_local(
     options: &BookOpenOptions,
 ) -> Result<Box<dyn BookBackend>> {
     match kind {
-        BookKind::Epub => Ok(Box::new(super::epub::EpubBook::open_with_limits(
+        BookKind::Epub => Ok(Box::new(epub::EpubBook::open_with_limits(
             path,
             options.limits,
         )?)),
-        BookKind::FictionBook => Ok(Box::new(super::fictionbook::FictionBook::open(
-            path, options,
-        )?)),
-        BookKind::Kindle => Ok(Box::new(super::kindle::KindleBook::open(path, options)?)),
+        BookKind::FictionBook => Ok(Box::new(fictionbook::FictionBook::open(path, options)?)),
+        BookKind::Kindle => Ok(Box::new(kindle::KindleBook::open(path, options)?)),
         BookKind::Web => Err(Error::Compatibility("Use a URL for web content.".into())),
     }
 }

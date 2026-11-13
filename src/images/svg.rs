@@ -1,10 +1,9 @@
 mod cost;
-mod loader;
 mod process;
 mod styles;
 mod validation;
 
-pub(super) use loader::ImageDecoder;
+pub(super) use process::decode_isolated;
 pub use process::{ImageWorkerOptions, SvgRequest, run_svg_helper};
 
 use super::{DecodedImage, ImageLimits, ImageSourceFormat, decode_image};
@@ -16,7 +15,7 @@ use resvg::{tiny_skia, usvg};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-use validation::{svg_error, validate_svg};
+pub(super) use validation::{svg_error, validate_svg};
 
 #[derive(Clone, Copy)]
 pub struct SvgLimits {
@@ -112,7 +111,7 @@ impl EmbeddedBudget {
     ) -> Option<usvg::ImageKind> {
         if self
             .remaining_bytes
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |remaining| {
+            .try_update(Ordering::Relaxed, Ordering::Relaxed, |remaining| {
                 remaining.checked_sub(data.len() as u64)
             })
             .is_err()
@@ -125,7 +124,7 @@ impl EmbeddedBudget {
             .and_then(|decoded| {
                 let pixels = u64::from(decoded.pixels.width()) * u64::from(decoded.pixels.height());
                 self.remaining_pixels
-                    .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |remaining| {
+                    .try_update(Ordering::Relaxed, Ordering::Relaxed, |remaining| {
                         remaining.checked_sub(pixels)
                     })
                     .ok()?;

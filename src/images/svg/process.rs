@@ -65,7 +65,7 @@ enum SvgReply {
     Failed { message: String },
 }
 
-pub(super) fn decode_isolated(
+pub(in crate::images) fn decode_isolated(
     bytes: &[u8],
     images: &BTreeMap<String, Arc<Vec<u8>>>,
     options: &ImageWorkerOptions,

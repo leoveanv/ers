@@ -39,7 +39,7 @@ pub(super) fn read_flows(
         .ok_or_else(invalid_flows)?;
     let mut previous_end = 0;
     let mut flows = Vec::with_capacity(count);
-    for interval in bytes[start..end].chunks_exact(8) {
+    for interval in bytes[start..end].as_chunks::<8>().0 {
         let start = number(interval, 0)? as usize;
         let end = number(interval, 4)? as usize;
         // #NOTE: Some writers declare only the HTML length; later flow bounds are also checked during decoding.

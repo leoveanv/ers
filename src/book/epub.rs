@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
+use super::resource_path::{join_resource, validate_resource_name};
 use super::xml::parse_xml;
 use percent_encoding::percent_decode_str;
 use roxmltree::{Document, Node};
@@ -13,7 +14,7 @@ use crate::{Error, Result};
 
 pub struct EpubBook {
     archive: ZipArchive<File>,
-    descriptor: super::dispatch::BookDescriptor,
+    descriptor: super::BookDescriptor,
     limits: ResourceLimits,
 }
 
@@ -67,7 +68,7 @@ impl EpubBook {
         append_supplemental(&mut contents, &package.manifest, &package_path)?;
         Ok(Self {
             archive,
-            descriptor: super::dispatch::BookDescriptor {
+            descriptor: super::BookDescriptor {
                 metadata: package.metadata,
                 contents,
                 spine_len,
@@ -107,18 +108,15 @@ impl EpubBook {
     }
 }
 
-impl super::dispatch::BookBackend for EpubBook {
-    fn descriptor(&self) -> &super::dispatch::BookDescriptor {
+impl super::BookBackend for EpubBook {
+    fn descriptor(&self) -> &super::BookDescriptor {
         &self.descriptor
     }
     fn raw_text(&mut self, id: &str) -> Result<String> {
         EpubBook::raw_text(self, id)
     }
-    fn asset(&mut self, id: &str) -> Result<super::dispatch::BookAsset> {
-        Ok(super::dispatch::BookAsset::new(
-            id,
-            EpubBook::asset(self, id)?,
-        ))
+    fn asset(&mut self, id: &str) -> Result<super::BookAsset> {
+        Ok(super::BookAsset::new(id, EpubBook::asset(self, id)?))
     }
 }
 
@@ -139,19 +137,6 @@ fn validate_archive(archive: &mut ZipArchive<File>, limits: ResourceLimits) -> R
                 "The ebook exceeds the uncompressed archive size limit.".into(),
             ));
         }
-    }
-    Ok(())
-}
-
-fn validate_resource_name(name: &str) -> Result<()> {
-    if name.is_empty()
-        || name.starts_with('/')
-        || name.contains(['\0', '\\'])
-        || name.split('/').any(|segment| segment == "..")
-    {
-        return Err(Error::Compatibility(
-            "The ebook resource path is unsafe.".into(),
-        ));
     }
     Ok(())
 }
@@ -359,42 +344,6 @@ fn append_supplemental(
         }
     }
     Ok(())
-}
-
-pub(crate) fn join_resource(base_document: &str, reference: &str) -> Result<String> {
-    if reference.starts_with('/')
-        || reference
-            .split('/')
-            .next()
-            .is_some_and(|first| first.contains(':'))
-    {
-        return Err(Error::Compatibility(
-            "An ebook resource cannot name an external or absolute path.".into(),
-        ));
-    }
-    let base = base_document
-        .rsplit_once('/')
-        .map_or("", |(parent, _)| parent);
-    let mut segments = base
-        .split('/')
-        .filter(|segment| !segment.is_empty())
-        .collect::<Vec<_>>();
-    for segment in reference.split('/') {
-        match segment {
-            "" | "." => {}
-            ".." => {
-                if segments.pop().is_none() {
-                    return Err(Error::Compatibility(
-                        "An ebook resource escapes its archive root.".into(),
-                    ));
-                }
-            }
-            _ => segments.push(segment),
-        }
-    }
-    let path = segments.join("/");
-    validate_resource_name(&path)?;
-    Ok(path)
 }
 
 fn parse_toc(

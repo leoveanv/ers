@@ -5,13 +5,13 @@ use crate::{Error, Result};
 use roxmltree::{Document, Node};
 use std::collections::{BTreeMap, BTreeSet};
 
-pub(super) struct SvgSource<'a> {
+pub(in crate::images) struct SvgSource<'a> {
     pub text: &'a str,
     pub needs_fonts: bool,
     pub image_refs: BTreeSet<String>,
 }
 
-pub(super) fn validate_svg<'a>(
+pub(in crate::images) fn validate_svg<'a>(
     bytes: &'a [u8],
     limits: &SvgLimits,
     cancellation: &Cancellation,
@@ -182,6 +182,6 @@ fn href<'a, 'input>(node: Node<'a, 'input>) -> Option<&'a str> {
         .or_else(|| node.attribute(("http://www.w3.org/1999/xlink", "href")))
 }
 
-pub(super) fn svg_error(detail: &str) -> Error {
+pub(in crate::images) fn svg_error(detail: &str) -> Error {
     Error::Compatibility(format!("Cannot preview this SVG image: {detail}"))
 }

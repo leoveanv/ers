@@ -1,8 +1,6 @@
 mod hyperlinks;
 mod models;
 mod position;
-mod preparation;
-mod selection;
 pub use hyperlinks::{
     HintPlacement, HyperlinkRequest, LinkHint, external_url, link_hints, place_hints,
 };
@@ -10,10 +8,10 @@ pub use models::{
     Bookmark, BookmarkRequest, LoadRequest, PageDirection, ReadingState, SaveRequest,
 };
 pub use position::{ImagePosition, ViewPosition};
-pub use preparation::{PreparedWindow, WindowRequest};
 
 use std::sync::Arc;
 
+use crate::annotations::{SelectionCell, SelectionSurface};
 use crate::document::RenderedDocument;
 use crate::{Error, Result};
 
@@ -349,5 +347,73 @@ impl ReadingWindow {
         }
         let row = self.display_row_for_original(anchor.saturating_sub(position.screen_row));
         Ok(WindowMovement::Ready(self.cursor_at(row)))
+    }
+}
+
+impl SelectionSurface for ReadingWindow {
+    fn cell(&self, index: usize) -> Option<SelectionCell<'_>> {
+        self.bands.iter().find_map(|band| {
+            let local = index.checked_sub(band.first_cell)?;
+            band.document
+                .layout
+                .source_cells
+                .get(local)
+                .map(|cell| SelectionCell {
+                    source: cell,
+                    row: band.first_row + cell.row,
+                })
+        })
+    }
+    fn cells(&self) -> Box<dyn Iterator<Item = SelectionCell<'_>> + '_> {
+        Box::new(self.bands.iter().flat_map(|band| {
+            band.document
+                .layout
+                .source_cells
+                .iter()
+                .map(move |cell| SelectionCell {
+                    source: cell,
+                    row: band.first_row + cell.row,
+                })
+        }))
+    }
+
+    fn cell_count(&self) -> usize {
+        self.bands
+            .iter()
+            .map(|band| band.document.layout.source_cells.len())
+            .sum()
+    }
+    fn row_count(&self) -> usize {
+        self.rows
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct WindowRequest {
+    pub load: LoadRequest,
+    pub shift_rows: isize,
+    pub viewport_rows: usize,
+}
+
+pub struct PreparedWindow {
+    pub window: ReadingWindow,
+    pub cursor: DocumentRow,
+    pub document: Arc<RenderedDocument>,
+}
+
+impl PreparedWindow {
+    pub fn new(window: ReadingWindow, cursor: DocumentRow) -> Result<Self> {
+        window.row_number(cursor)?;
+        let document = window
+            .document(cursor.document_index)
+            .cloned()
+            .ok_or_else(|| {
+                Error::Compatibility("The viewport document is outside its prepared window.".into())
+            })?;
+        Ok(Self {
+            window,
+            cursor,
+            document,
+        })
     }
 }

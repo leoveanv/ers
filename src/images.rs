@@ -1,4 +1,5 @@
 mod decoder;
+mod loader;
 mod svg;
 pub use svg::{
     ImageWorkerOptions, SvgDecodeOptions, SvgLimits, SvgRequest, decode_svg, run_svg_helper,
