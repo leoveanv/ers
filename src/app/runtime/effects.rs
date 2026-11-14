@@ -28,9 +28,11 @@ impl ReaderRuntime {
                 ReaderEffect::Image(job) => {
                     self.images
                         .get_or_insert_with(|| {
-                            crate::images::ImageWorker::start(
-                                crate::images::ImageWorkerOptions::new(self.image_decoder.clone()),
-                            )
+                            let mut options =
+                                crate::images::ImageWorkerOptions::new(self.image_decoder.clone());
+                            options.web_cache_directory =
+                                Some(self.database.with_file_name("articles"));
+                            crate::images::ImageWorker::start(options)
                         })
                         .request(self.jobs.location().clone(), job);
                     Vec::new()

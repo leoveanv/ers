@@ -1,6 +1,6 @@
 # ers
 
-`ers` is a terminal ebook reader written in Rust. It supports EPUB, FB2, MOBI, AZW, AZW3, and HTTP/HTTPS pages, with reading progress, search, bookmarks, links, images, and EPUB annotations.
+`ers` is a terminal ebook reader written in Rust. It supports EPUB, FB2, MOBI, AZW, AZW3, and HTTP/HTTPS pages, with reading progress, search, bookmarks, links, images, and annotations for EPUB books and cached web articles.
 
 **Platform:** `ers` has been tested on macOS only. Other platforms are untested.
 
@@ -35,6 +35,16 @@ ers --dump /path/to/book.epub
 
 Run `ers` without arguments to resume the last book, or provide a history number or title/author search. Use `ers --help` for CLI options.
 
+## Web articles and offline reading
+
+Open an HTTP/HTTPS URL to save a local snapshot of its text and supported images. Reopening that URL, including from history, uses the saved snapshot without network requests. Website edits do not change saved articles or move their annotations.
+
+Snapshots live in `~/.config/ers/articles/`, beside `states.db` (or under your configured `XDG_CONFIG_HOME`). Back up both to preserve offline articles and their annotations. Removing an entry from history does not delete its snapshot or annotations. Snapshots do not expire automatically; this release has no refresh command.
+
+The first download attempts to save up to 128 distinct images, within a 128 MiB text-and-image budget and a 30-second image-download budget. Individual resources are limited to 32 MiB. Missing, unsupported, or oversized images do not prevent reading; their previews report that they were not cached. Images loaded only by JavaScript, CSS backgrounds, and `srcset`-only images are not captured. Links to other pages still open in your browser.
+
+URLs with different fragments (`#section`) share a snapshot. Query strings remain significant, and redirect aliases are stored separately. `--dump` remains a fresh, text-only fetch and does not create application storage. Corrupt snapshots produce an error rather than silently downloading changed text.
+
 ## Reading controls
 
 | Keys | Action |
@@ -53,7 +63,7 @@ Run `ers` without arguments to resume the last book, or provide a history number
 | `D` | Toggle double spread. |
 | `-` / `+` | Shrink / enlarge text in single-column mode. |
 | `d` | Look up a word. |
-| `c` / `s` | Change color profile / toggle progress. |
+| `c` / `p` | Change color profile / toggle progress. |
 | `?` / `q` | Help / quit. |
 
 Numeric prefixes repeat supported commands. Terminals must distinguish Ctrl-I from Tab for forward jump history. In tmux, enable `extended-keys`; `ers` accepts CSI-u and xterm extended-key formats. The outer terminal must support extended keys as well.
@@ -64,7 +74,7 @@ During long operations, input buffers have limits. If a buffer fills, `ers` repo
 
 ## Highlights and notes
 
-Annotations are available for local EPUB books and do not modify the ebook.
+Annotations are available for local EPUB books and cached web articles. They do not modify the ebook or saved article.
 
 1. Press `v` to enter selection mode, then move with `h/j/k/l` or the arrow keys.
 2. Press Space to start a selection and move to its inclusive end. Press Enter to save a highlight, or `n` to add a note.
@@ -74,7 +84,7 @@ In note NORMAL mode, use `h/j/k/l` to move, `w/b/e` for words, and `0/$` for lin
 
 Press `a` to open the annotation list. Select a highlight and press Enter to jump, `e` to edit its note, `f` to read it, or `d` to delete it after confirmation. Press `r` to copy annotations from another identity after validating their exact positions.
 
-Press `O` to link a Markdown file for one-way export. Confirm the destination before writing. Existing handwritten text outside the managed section is preserved. If export fails or encounters a conflict, the annotation remains saved locally; `O` provides retry and recovery options.
+Press `e` to link a Markdown file for one-way export. Confirm the destination before writing. Existing handwritten text outside the managed section is preserved. If export fails or encounters a conflict, the annotation remains saved locally; `e` provides retry and recovery options.
 
 ## Links and images
 

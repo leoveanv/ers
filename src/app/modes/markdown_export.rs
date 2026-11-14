@@ -72,7 +72,7 @@ impl MarkdownState {
         annotations_enabled: bool,
     ) -> Vec<ReaderEffect> {
         if !annotations_enabled {
-            *context.status = "Annotations are available only for local EPUB books.".into();
+            *context.status = "Annotations are available for EPUB books and web articles.".into();
             return Vec::new();
         }
         self.submit(context, LinkCommand::Status, LinkMode::Summary)

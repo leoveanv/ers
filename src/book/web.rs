@@ -1,13 +1,17 @@
+mod cache;
+
 use super::BookMetadata;
 use super::BookNavigation;
-use super::location::validate_web_url;
+use super::location::{validate_web_url, web_resource_url};
 use super::{BookAsset, BookBackend, BookDescriptor, BookOpenOptions, ResourceTarget};
 use crate::cancellation::Cancellation;
 use crate::document::html::{HtmlToken, HtmlTokenizer, unescape_html};
 use crate::{Error, Result};
+use cache::{ArticleCache, CachedPage, IMAGE_COUNT_MAX, SNAPSHOT_BYTES_MAX};
 use reqwest::{Client, Url};
+use std::collections::{BTreeMap, BTreeSet};
 use std::sync::OnceLock;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use tokio::runtime::{Builder, Runtime};
 
 pub(super) struct WebBook {
@@ -17,7 +21,15 @@ pub(super) struct WebBook {
     client: Client,
     cancellation: Cancellation,
     resource_bytes_max: u64,
+    cache: Option<ArticleCache>,
 }
+
+#[derive(Clone, Copy)]
+struct FetchLimits {
+    bytes_max: u64,
+    timeout: Duration,
+}
+
 struct WebResponse {
     url: Url,
     content_type: String,
@@ -48,10 +60,11 @@ async fn canceled(cancellation: &Cancellation) {
     }
 }
 
-async fn request(client: &Client, url: &Url, limit: u64) -> Result<WebResponse> {
+async fn request(client: &Client, url: &Url, limits: FetchLimits) -> Result<WebResponse> {
     validate_web_url(url)?;
     let mut response = client
         .get(url.clone())
+        .timeout(limits.timeout)
         .send()
         .await
         .map_err(network_error)?
@@ -59,7 +72,7 @@ async fn request(client: &Client, url: &Url, limit: u64) -> Result<WebResponse> 
         .map_err(network_error)?;
     if response
         .content_length()
-        .is_some_and(|length| length > limit)
+        .is_some_and(|length| length > limits.bytes_max)
     {
         return Err(Error::Compatibility(
             "The web response exceeds its size limit.".into(),
@@ -75,7 +88,7 @@ async fn request(client: &Client, url: &Url, limit: u64) -> Result<WebResponse> 
         .to_owned();
     let mut bytes = Vec::new();
     while let Some(chunk) = response.chunk().await.map_err(network_error)? {
-        if (bytes.len() as u64).saturating_add(chunk.len() as u64) > limit {
+        if (bytes.len() as u64).saturating_add(chunk.len() as u64) > limits.bytes_max {
             return Err(Error::Compatibility(
                 "The web response exceeds its decoded size limit.".into(),
             ));
@@ -92,11 +105,11 @@ async fn request(client: &Client, url: &Url, limit: u64) -> Result<WebResponse> 
 fn fetch(
     client: &Client,
     url: &Url,
-    limit: u64,
+    limits: FetchLimits,
     cancellation: &Cancellation,
 ) -> Result<WebResponse> {
     cancellation.check()?;
-    runtime()?.block_on(async { tokio::select! { biased; _ = canceled(cancellation) => Err(Error::Canceled), result = request(client, url, limit) => result } })
+    runtime()?.block_on(async { tokio::select! { biased; _ = canceled(cancellation) => Err(Error::Canceled), result = request(client, url, limits) => result } })
 }
 
 fn decode_html(response: &WebResponse) -> Result<String> {
@@ -139,32 +152,25 @@ fn title(html: &str) -> Option<String> {
 impl WebBook {
     pub fn open(url: &Url, options: &BookOpenOptions) -> Result<Self> {
         validate_web_url(url)?;
-        let _guard = runtime()?.enter();
-        let client = Client::builder()
-            .user_agent(concat!("ers/", env!("CARGO_PKG_VERSION")))
-            .timeout(Duration::from_secs(30))
-            .connect_timeout(Duration::from_secs(10))
-            .redirect(reqwest::redirect::Policy::custom(|attempt| {
-                if attempt.previous().len() >= 10 || validate_web_url(attempt.url()).is_err() {
-                    attempt.error("Unsafe URL or too many redirects")
-                } else {
-                    attempt.follow()
-                }
-            }))
-            .build()
-            .map_err(network_error)?;
-        drop(_guard);
-        let response = fetch(
-            &client,
-            url,
-            options.limits.resource_bytes_max,
-            &options.cancellation,
-        )?;
-        let html = decode_html(&response)?;
+        let client = web_client()?;
+        let cache = options
+            .web_cache_directory
+            .as_ref()
+            .map(|directory| ArticleCache::new(directory, url, options.limits));
+        let page = match cache
+            .as_ref()
+            .map(ArticleCache::load)
+            .transpose()?
+            .flatten()
+        {
+            Some(page) => page,
+            None => import_page(&client, url, cache.as_ref(), options)?,
+        };
+        let html = page.html;
         let descriptor = BookDescriptor {
             metadata: BookMetadata {
                 title: title(&html),
-                source: Some(url.to_string()),
+                source: Some(web_resource_url(url).to_string()),
                 format: Some("HTML".into()),
                 ..BookMetadata::default()
             },
@@ -176,12 +182,144 @@ impl WebBook {
         Ok(Self {
             descriptor,
             html,
-            base: response.url,
+            base: page.base,
             client,
             cancellation: options.cancellation.clone(),
             resource_bytes_max: options.limits.resource_bytes_max,
+            cache,
         })
     }
+}
+
+fn web_client() -> Result<Client> {
+    let _guard = runtime()?.enter();
+    Client::builder()
+        .user_agent(concat!("ers/", env!("CARGO_PKG_VERSION")))
+        .timeout(Duration::from_secs(30))
+        .connect_timeout(Duration::from_secs(10))
+        .redirect(reqwest::redirect::Policy::custom(|attempt| {
+            if attempt.previous().len() >= 10 || validate_web_url(attempt.url()).is_err() {
+                attempt.error("Unsafe URL or too many redirects")
+            } else {
+                attempt.follow()
+            }
+        }))
+        .build()
+        .map_err(network_error)
+}
+
+fn import_page(
+    client: &Client,
+    url: &Url,
+    cache: Option<&ArticleCache>,
+    options: &BookOpenOptions,
+) -> Result<CachedPage> {
+    let response = fetch(
+        client,
+        url,
+        FetchLimits {
+            bytes_max: options.limits.resource_bytes_max,
+            timeout: Duration::from_secs(30),
+        },
+        &options.cancellation,
+    )?;
+    let page = CachedPage {
+        html: decode_html(&response)?,
+        base: web_resource_url(&response.url),
+    };
+    if page.html.len() as u64 > options.limits.resource_bytes_max {
+        return Err(Error::Compatibility(
+            "The decoded web document exceeds its size limit.".into(),
+        ));
+    }
+    let Some(cache) = cache else {
+        return Ok(page);
+    };
+    let assets = prefetch_images(client, &page, options)?;
+    cache.save(&page, &assets, &options.cancellation)
+}
+
+fn prefetch_images(
+    client: &Client,
+    page: &CachedPage,
+    options: &BookOpenOptions,
+) -> Result<BTreeMap<String, BookAsset>> {
+    let maximum = options.limits.archive_bytes_max.min(SNAPSHOT_BYTES_MAX);
+    let mut remaining = maximum
+        .checked_sub(page.html.len() as u64)
+        .ok_or_else(|| Error::Compatibility("The article exceeds its cache size limit.".into()))?;
+    if options.limits.archive_entries_max < 2 {
+        return Err(Error::Compatibility(
+            "The article exceeds its cache entry limit.".into(),
+        ));
+    }
+    let document = crate::document::text::parse_document("_", &page.html)?;
+    let deadline = Instant::now() + Duration::from_secs(30);
+    let mut seen = BTreeSet::new();
+    let mut assets = BTreeMap::new();
+    for path in document
+        .paragraphs
+        .iter()
+        .filter_map(|paragraph| paragraph.image_path.as_deref())
+    {
+        options.cancellation.check()?;
+        if remaining == 0
+            || seen.len() >= IMAGE_COUNT_MAX.min(options.limits.archive_entries_max - 2)
+        {
+            break;
+        }
+        let Ok(url) = image_url(&page.base, path) else {
+            continue;
+        };
+        if !seen.insert(url.to_string()) {
+            continue;
+        }
+        let timeout = deadline.saturating_duration_since(Instant::now());
+        if timeout.is_zero() {
+            break;
+        }
+        let limits = FetchLimits {
+            bytes_max: options.limits.resource_bytes_max.min(remaining),
+            timeout,
+        };
+        match fetch_asset(client, &url, limits, &options.cancellation) {
+            Ok(asset) => {
+                remaining -= asset.bytes.len() as u64;
+                assets.insert(url.to_string(), asset);
+            }
+            Err(Error::Canceled) => return Err(Error::Canceled),
+            Err(_) => continue,
+        }
+    }
+    Ok(assets)
+}
+
+fn image_url(base: &Url, path: &str) -> Result<Url> {
+    let url = base
+        .join(path)
+        .map_err(|error| Error::Compatibility(format!("Invalid web resource URL: {error}")))?;
+    validate_web_url(&url)?;
+    Ok(web_resource_url(&url))
+}
+
+fn fetch_asset(
+    client: &Client,
+    url: &Url,
+    limits: FetchLimits,
+    cancellation: &Cancellation,
+) -> Result<BookAsset> {
+    let response = fetch(client, url, limits, cancellation)?;
+    let name = response
+        .url
+        .path_segments()
+        .and_then(Iterator::last)
+        .filter(|name| !name.is_empty())
+        .unwrap_or("image")
+        .to_owned();
+    Ok(BookAsset {
+        name,
+        bytes: response.bytes,
+    })
 }
 
 impl BookBackend for WebBook {
@@ -197,27 +335,19 @@ impl BookBackend for WebBook {
         Ok(self.html.clone())
     }
     fn asset(&mut self, id: &str) -> Result<BookAsset> {
-        let url = self
-            .base
-            .join(id)
-            .map_err(|error| Error::Compatibility(format!("Invalid web resource URL: {error}")))?;
-        let response = fetch(
+        let url = image_url(&self.base, id)?;
+        if let Some(cache) = &self.cache {
+            return cache.asset(&url);
+        }
+        fetch_asset(
             &self.client,
             &url,
-            self.resource_bytes_max,
+            FetchLimits {
+                bytes_max: self.resource_bytes_max,
+                timeout: Duration::from_secs(30),
+            },
             &self.cancellation,
-        )?;
-        let name = response
-            .url
-            .path_segments()
-            .and_then(Iterator::last)
-            .filter(|name| !name.is_empty())
-            .unwrap_or("image")
-            .to_owned();
-        Ok(BookAsset {
-            name,
-            bytes: response.bytes,
-        })
+        )
     }
     fn resolve_resource(&self, _: &str, href: &str) -> Result<ResourceTarget> {
         let mut url = self

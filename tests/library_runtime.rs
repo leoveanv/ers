@@ -411,7 +411,7 @@ fn reopening_the_reader_preserves_its_saved_wide_layout() {
 fn book_switching_retains_book_specific_display_preferences() {
     let fixture = LibraryFixture::new();
     let mut runtime = fixture.runtime();
-    keys(&mut runtime, "Dcs");
+    keys(&mut runtime, "Dcp");
     wait(&mut runtime, |runtime| {
         !runtime.model.as_ref().unwrap().view().loading
     });

@@ -273,7 +273,7 @@ fn pending_annotation_save_limits_queued_keys() {
     let initial_progress = reader.view().show_progress;
     reader.handle_key(InputKey::Character('v'));
     for _ in 0..4096 {
-        reader.handle_key(InputKey::Character('s'));
+        reader.handle_key(InputKey::Character('p'));
     }
     finish_annotation_save(&mut reader, job);
     assert_ne!(reader.view().show_progress, initial_progress);
@@ -283,7 +283,7 @@ fn pending_annotation_save_limits_queued_keys() {
 fn pending_annotation_save_reports_ignored_input_after_completion() {
     let (mut reader, job) = pending_annotation_save();
     for _ in 0..4097 {
-        reader.handle_key(InputKey::Character('s'));
+        reader.handle_key(InputKey::Character('p'));
     }
     finish_annotation_save(&mut reader, job);
     assert!(reader.view().status.contains("input was ignored"));
@@ -293,7 +293,7 @@ fn pending_annotation_save_reports_ignored_input_after_completion() {
 fn ignored_annotation_input_is_reported_after_a_successful_retry() {
     let (mut reader, job) = pending_annotation_save();
     for _ in 0..4097 {
-        reader.handle_key(InputKey::Character('s'));
+        reader.handle_key(InputKey::Character('p'));
     }
     reader.annotation_completed(ers::annotations::AnnotationResult {
         request_id: job.request_id,
@@ -340,7 +340,7 @@ fn ignored_pending_input_is_reported_after_a_concurrent_reflow() {
 fn ignored_input_notice_is_not_duplicated_after_concurrent_reflow() {
     let (mut reader, job) = pending_annotation_save();
     for _ in 0..4097 {
-        reader.handle_key(InputKey::Character('s'));
+        reader.handle_key(InputKey::Character('p'));
     }
     let request = reader
         .resize(Viewport {
@@ -369,7 +369,7 @@ fn ignored_input_notice_is_not_duplicated_after_concurrent_reflow() {
 fn ignored_pending_input_is_reported_after_a_failed_reflow() {
     let (mut reader, job) = pending_annotation_save();
     for _ in 0..4097 {
-        reader.handle_key(InputKey::Character('s'));
+        reader.handle_key(InputKey::Character('p'));
     }
     reader.resize(Viewport {
         columns: 30,

@@ -16,6 +16,7 @@ use std::time::{Duration, Instant};
 
 #[derive(Clone)]
 pub struct ImageWorkerOptions {
+    pub web_cache_directory: Option<PathBuf>,
     pub svg_program: PathBuf,
     pub svg_heap_bytes_max: usize,
     pub svg_timeout: Duration,
@@ -24,6 +25,7 @@ pub struct ImageWorkerOptions {
 impl ImageWorkerOptions {
     pub fn new(svg_program: PathBuf) -> Self {
         Self {
+            web_cache_directory: None,
             svg_program,
             svg_heap_bytes_max: 256 * 1024 * 1024,
             svg_timeout: Duration::from_secs(5),

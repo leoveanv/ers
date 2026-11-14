@@ -38,7 +38,7 @@ pub(super) fn run_command(
                 .exports
                 .ok_or_else(|| {
                     crate::Error::Compatibility(
-                        "Annotations are available only for local EPUB books.".into(),
+                        "Annotations are available for EPUB books and web articles.".into(),
                     )
                 })
                 .and_then(|exports| worker.apply_link(job.command, exports));

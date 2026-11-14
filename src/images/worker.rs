@@ -4,6 +4,7 @@ use crate::book::{Book, BookLocation, BookOpenOptions};
 use crate::cancellation::Cancellation;
 use crate::{Error, Result};
 use std::collections::VecDeque;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::thread::JoinHandle;
 use std::time::SystemTime;
@@ -87,6 +88,7 @@ fn run(mailbox: &Mailbox, options: super::ImageWorkerOptions) {
     let mut cache = ImageCache {
         entries: VecDeque::new(),
         bytes: 0,
+        web_cache_directory: options.web_cache_directory.clone(),
         decoder: ImageDecoder::new(options),
     };
     while let Some(envelope) = mailbox.receive() {
@@ -113,6 +115,7 @@ fn load_cached(envelope: &ImageEnvelope, cache: &mut ImageCache) -> Result<Arc<I
         &envelope.job.image.target,
         &envelope.cancellation,
         &mut cache.decoder,
+        cache.web_cache_directory.as_deref(),
     )?);
     if key != ImageKey::new(&envelope.job.location, &envelope.job.image.target)? {
         return Err(Error::Compatibility(
@@ -128,11 +131,13 @@ fn load_image(
     target: &ImageTarget,
     cancellation: &Cancellation,
     decoder: &mut ImageDecoder,
+    web_cache_directory: Option<&Path>,
 ) -> Result<ImagePayload> {
     let mut book = Book::open_with_options(
         location.clone(),
         BookOpenOptions {
             cancellation: cancellation.clone(),
+            web_cache_directory: web_cache_directory.map(Path::to_path_buf),
             ..BookOpenOptions::default()
         },
     )?;
@@ -195,6 +200,7 @@ struct ImageCache {
     entries: VecDeque<CachedImage>,
     bytes: usize,
     decoder: ImageDecoder,
+    web_cache_directory: Option<PathBuf>,
 }
 
 impl ImageCache {

@@ -173,6 +173,8 @@ fn reader_loop(launch: TerminalLaunch, modes: Arc<std::sync::Mutex<TerminalModes
         return Ok(());
     };
     let image_decoder = std::env::current_exe()?;
+    let mut image_options = crate::images::ImageWorkerOptions::new(image_decoder.clone());
+    image_options.web_cache_directory = Some(database.with_file_name("articles"));
     let mut runtime = ReaderRuntime::start(ReaderLaunch {
         image_decoder: image_decoder.clone(),
         executables: crate::integrations::ExecutableSearch::capture()?,
@@ -186,11 +188,7 @@ fn reader_loop(launch: TerminalLaunch, modes: Arc<std::sync::Mutex<TerminalModes
     let support = image_support.detect();
     let image_ids = images::ImageIds::new(uuid::Uuid::new_v4().as_u128() as u32);
     let mut image_renderer = images::ImageRenderer::new(support, image_ids.clone());
-    let mut inline_images = inline_images::InlineImages::new(
-        crate::images::ImageWorkerOptions::new(image_decoder),
-        support,
-        image_ids,
-    );
+    let mut inline_images = inline_images::InlineImages::new(image_options, support, image_ids);
     let mut dirty = true;
     let mut last_frame = Instant::now() - Duration::from_secs(1);
     let mut last_input = Instant::now();

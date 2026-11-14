@@ -273,7 +273,7 @@ impl ReaderModel {
 
     fn ensure_annotation_column(&mut self) -> Option<Vec<ReaderEffect>> {
         if !self.info.annotations_enabled {
-            self.status = "Annotations are available only for local EPUB books.".into();
+            self.status = "Annotations are available for EPUB books and web articles.".into();
             return Some(Vec::new());
         }
         if self.spread != 2 {

@@ -8,13 +8,14 @@ mod web;
 pub(crate) mod xml;
 
 pub use location::BookLocation;
+pub(crate) use location::web_resource_url;
 pub use navigation::{BookNavigation, NavigationPage, NavigationSection, parse_navigation};
 
 use crate::cancellation::Cancellation;
 use crate::{Error, Result};
 use percent_encoding::percent_decode_str;
 use serde::{Deserialize, Serialize};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LibraryEntry {
@@ -73,6 +74,7 @@ pub enum BookKind {
 
 #[derive(Default)]
 pub struct BookOpenOptions {
+    pub web_cache_directory: Option<PathBuf>,
     pub limits: ResourceLimits,
     pub cancellation: Cancellation,
 }
@@ -197,7 +199,7 @@ impl Book {
         self.kind
     }
     pub fn annotations_enabled(&self) -> bool {
-        self.kind == BookKind::Epub
+        matches!(self.kind, BookKind::Epub | BookKind::Web)
     }
     pub fn location(&self) -> &BookLocation {
         &self.location

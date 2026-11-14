@@ -3,7 +3,7 @@ use crate::annotations::AnnotationBook;
 use crate::app::BookInfo;
 use crate::app::requests::{LibraryCommand, LibraryReply};
 use crate::book::LibraryEntry;
-use crate::book::{Book, BookLocation, BookOpenOptions};
+use crate::book::{Book, BookLocation, BookOpenOptions, web_resource_url};
 use crate::cancellation::Cancellation;
 use crate::document::RenderedDocument;
 use crate::document::text::{parse_document, python_whitespace};
@@ -41,10 +41,11 @@ impl BookWorker {
         if let Some(parent) = database.parent() {
             std::fs::create_dir_all(parent)?;
         }
-        let book = Book::open_with_options(
+        let mut book = Book::open_with_options(
             location.clone(),
             BookOpenOptions {
                 cancellation: options.cancellation,
+                web_cache_directory: Some(database.with_file_name("articles")),
                 ..BookOpenOptions::default()
             },
         )?;
@@ -56,7 +57,7 @@ impl BookWorker {
             Some(store.identify_book(
                 &AnnotationBook {
                     id: uuid::Uuid::new_v4().to_string(),
-                    fingerprint: fingerprint(Path::new(&path))?,
+                    fingerprint: annotation_fingerprint(&mut book)?,
                     title: metadata.title.clone().unwrap_or_default(),
                     author: metadata.creator.clone().unwrap_or_default(),
                 },
@@ -99,7 +100,9 @@ impl BookWorker {
 
     pub(super) fn annotation_book(&self) -> Result<&AnnotationBook> {
         self.annotation_book.as_ref().ok_or_else(|| {
-            Error::Compatibility("Annotations are available only for local EPUB books.".into())
+            Error::Compatibility(
+                "Annotations are available for EPUB books and web articles.".into(),
+            )
         })
     }
 
@@ -168,6 +171,21 @@ impl BookWorker {
             .count();
         self.next_total += 1;
         Ok(())
+    }
+}
+
+fn annotation_fingerprint(book: &mut Book) -> Result<String> {
+    match book.location() {
+        BookLocation::Local(path) => fingerprint(path),
+        BookLocation::Web(url) => {
+            let source = web_resource_url(url);
+            let html = book.raw_text("_")?;
+            let mut hash = Sha256::new();
+            hash.update(source.as_str().as_bytes());
+            hash.update([0]);
+            hash.update(html.as_bytes());
+            Ok(format!("web-v1:{:x}", hash.finalize()))
+        }
     }
 }
 

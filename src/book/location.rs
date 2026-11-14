@@ -21,6 +21,13 @@ pub(crate) fn validate_web_url(url: &Url) -> Result<()> {
     Ok(())
 }
 
+// #NOTE: RFC 9110 §7.1 excludes fragments from the request target; query strings still identify resources.
+pub(crate) fn web_resource_url(url: &Url) -> Url {
+    let mut resource = url.clone();
+    resource.set_fragment(None);
+    resource
+}
+
 impl BookLocation {
     pub fn local(path: impl Into<PathBuf>) -> Self {
         Self::Local(path.into())

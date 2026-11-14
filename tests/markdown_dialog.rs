@@ -22,7 +22,7 @@ fn link_result(request_id: u64, reply: Result<LinkReply, String>) -> LinkResult 
 
 fn open_dialog(state: ExportState) -> ReaderModel {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     assert!(matches!(request.command, LinkCommand::Status));
     reader.link_completed(LinkResult {
         request_id: request.request_id,
@@ -74,7 +74,7 @@ fn interrupting_the_markdown_dialog_requests_a_durable_quit() {
 #[test]
 fn stale_markdown_results_leave_the_current_operation_pending() {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     let status = reader.view().status.to_owned();
 
     reader.link_completed(link_result(
@@ -109,7 +109,7 @@ fn failed_markdown_inspection_returns_to_the_path_draft() {
 #[test]
 fn retried_markdown_operation_replays_buffered_path_input() {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     reader.handle_paste("/synthetic/Notes.md");
     reader.link_completed(link_result(request.request_id, Err("Database busy".into())));
     let retry = job(reader.handle_key(InputKey::Enter));
@@ -129,7 +129,7 @@ fn retried_markdown_operation_replays_buffered_path_input() {
 #[test]
 fn pending_markdown_operation_limits_queued_keys() {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     for _ in 0..4097 {
         reader.handle_key(InputKey::Character('x'));
     }
@@ -149,7 +149,7 @@ fn pending_markdown_operation_limits_queued_keys() {
 #[test]
 fn pending_markdown_operation_reports_ignored_input_after_completion() {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     for _ in 0..4097 {
         reader.handle_key(InputKey::Character('x'));
     }
@@ -163,7 +163,7 @@ fn pending_markdown_operation_reports_ignored_input_after_completion() {
 #[test]
 fn pending_markdown_operation_rejects_an_oversized_paste() {
     let mut reader = support::reader();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     reader.handle_paste(&"x".repeat(8 * 1024 * 1024 + 1));
     reader.link_completed(LinkResult {
         request_id: request.request_id,
@@ -248,7 +248,7 @@ fn inspecting_link_metadata_does_not_acknowledge_a_failed_export() {
     failed.error = Some("External edits need confirmation".into());
     reader.export_updated(failed);
     let expected = reader.export_state().clone();
-    let request = job(reader.handle_key(InputKey::Character('O')));
+    let request = job(reader.handle_key(InputKey::Character('e')));
     reader.link_completed(LinkResult {
         request_id: request.request_id,
         reply: Ok(LinkReply::State(state)),

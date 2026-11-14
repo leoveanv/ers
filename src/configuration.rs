@@ -201,7 +201,7 @@ define_commands!(
     (Follow, "follow", "f", [InputKey::Enter]),
     (OpenImage, "open_image", "o", []),
     (RegexSearch, "regex_search", "/", []),
-    (ShowHideProgress, "show_hide_progress", "s", []),
+    (ShowHideProgress, "show_hide_progress", "p", []),
     (MarkPosition, "mark_position", "m", []),
     (JumpToPosition, "jump_to_position", "`", []),
     (AddBookmark, "add_bookmark", "b", []),
@@ -218,7 +218,7 @@ define_commands!(
     (Library, "library", "R", []),
     (AnnotationSelect, "annotation_select", "v", []),
     (AnnotationList, "annotation_list", "a", []),
-    (AnnotationLink, "annotation_link", "O", []),
+    (AnnotationLink, "annotation_link", "e", []),
     (JumpBackward, "jump_backward", "\u{0f}", []),
     (JumpForward, "jump_forward", "", [InputKey::ControlI]),
 );
