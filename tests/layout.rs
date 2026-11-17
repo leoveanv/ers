@@ -20,6 +20,49 @@ struct LayoutFixture {
 }
 
 #[test]
+fn table_before_heading_wraps_as_body_text() {
+    let document = parse_document(
+        "outline.html",
+        "<h3>Divine Names</h3><table><tr><td>Chs. 1–3:</td> \
+         <td>how the divine names do and do not know God</td></tr></table>\n\
+         <h3 id='next'>Mystical Theology</h3>",
+    )
+    .unwrap();
+    let layout = layout_document(&document, LayoutOptions::reader(24, false));
+    let lines = layout
+        .text_lines
+        .iter()
+        .map(|line| line.trim())
+        .filter(|line| !line.is_empty())
+        .collect::<Vec<_>>();
+    assert_eq!(
+        lines,
+        [
+            "Divine Names",
+            "Chs. 1–3: how the divine",
+            "names do and do not know",
+            "God",
+            "Mystical Theology",
+            "***",
+        ]
+    );
+    let heading = document
+        .semantics
+        .anchors
+        .iter()
+        .find(|anchor| anchor.fragment == "next")
+        .unwrap();
+    assert_eq!(
+        layout.row_for_offset(heading.offset),
+        layout
+            .text_lines
+            .iter()
+            .position(|line| line.trim() == "Mystical Theology")
+            .unwrap()
+    );
+}
+
+#[test]
 fn layout_fixtures_preserve_visible_rows() {
     let fixtures =
         serde_json::from_str::<Vec<LayoutFixture>>(include_str!("fixtures/layouts.json")).unwrap();

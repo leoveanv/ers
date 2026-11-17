@@ -249,7 +249,7 @@ impl DocumentParser {
             self.flags.heading = false;
         } else {
             match tag {
-                "p" | "div" | "img" | "image" => self.blank(),
+                "p" | "div" | "table" | "img" | "image" => self.blank(),
                 "script" | "style" | "head" => self.hidden = false,
                 "q" | "dt" | "dd" | "blockquote" => {
                     if !self.current().text.is_empty() {
