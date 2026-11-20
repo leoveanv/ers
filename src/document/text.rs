@@ -174,7 +174,7 @@ impl DocumentParser {
         if !self.hidden && !matches!(tag.name.as_str(), "head" | "script" | "style") {
             self.references.start(tag, position)?;
             self.metadata.start(tag, position);
-            if tag.self_closing {
+            if tag.self_closing || tag.name == "img" {
                 self.metadata.end(&tag.name, position);
             }
         }
@@ -182,7 +182,7 @@ impl DocumentParser {
             if tag.name == "br" {
                 self.blank();
             } else if matches!(tag.name.as_str(), "img" | "image") {
-                self.images(tag, true)?;
+                self.images(tag)?;
             }
             return Ok(());
         }
@@ -196,7 +196,7 @@ impl DocumentParser {
                 "script" | "style" | "head" => self.hidden = true,
                 "sup" => self.current().text.push_str("^{"),
                 "sub" => self.current().text.push_str("_{"),
-                "img" | "image" => self.images(tag, false)?,
+                "img" | "image" => self.images(tag)?,
                 "i" | "em" => start_style(&mut self.italics, position),
                 "b" | "strong" => start_style(&mut self.bold, position),
                 _ => {}
@@ -205,7 +205,7 @@ impl DocumentParser {
         Ok(())
     }
 
-    fn images(&mut self, tag: &HtmlTag, self_closing: bool) -> Result<()> {
+    fn images(&mut self, tag: &HtmlTag) -> Result<()> {
         let previous = self.image_variant.take();
         for attribute in &tag.attributes {
             if (tag.name == "img" && attribute.name == "src")
@@ -228,9 +228,8 @@ impl DocumentParser {
                     flags: ParagraphFlags::default(),
                     suppress_image,
                 });
-                if self_closing {
-                    self.blank();
-                }
+                // #NOTE: Always start a fresh paragraph after an image marker so HTML5 void <img> tags do not absorb following text into an unwrapped image row.
+                self.blank();
             }
         }
         Ok(())
@@ -249,7 +248,12 @@ impl DocumentParser {
             self.flags.heading = false;
         } else {
             match tag {
-                "p" | "div" | "table" | "img" | "image" => self.blank(),
+                "p" | "div" | "table" => self.blank(),
+                "img" | "image" => {
+                    if !self.current().text.is_empty() {
+                        self.blank();
+                    }
+                }
                 "script" | "style" | "head" => self.hidden = false,
                 "q" | "dt" | "dd" | "blockquote" => {
                     if !self.current().text.is_empty() {

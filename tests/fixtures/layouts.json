@@ -14687,7 +14687,9 @@
     "text_lines": [
       "before",
       "",
-      "  [IMAGE]after  ",
+      "    [IMAGE]     ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -14754,36 +14756,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 4,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 4,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 4,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 4,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 4,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 6,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 4,
+        "start": 22,
+        "end": 23,
+        "row": 6,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 4,
+        "start": 23,
+        "end": 24,
+        "row": 6,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 4,
+        "start": 24,
+        "end": 25,
+        "row": 6,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -14797,7 +14844,7 @@
         "style": "Bold"
       },
       {
-        "row": 6,
+        "row": 8,
         "col": 0,
         "n_letters": 16,
         "style": "Bold"
@@ -14805,7 +14852,7 @@
     ],
     "image_maps": {
       "2": "one two.png",
-      "6": "second.png"
+      "8": "second.png"
     },
     "links": [],
     "anchors": []
@@ -14818,7 +14865,9 @@
     "text_lines": [
       "before",
       "",
-      "  [IMAGE]after  ",
+      "    [IMAGE]     ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -14885,36 +14934,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 9,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 9,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 9,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 9,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 9,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 11,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 9,
+        "start": 22,
+        "end": 23,
+        "row": 11,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 9,
+        "start": 23,
+        "end": 24,
+        "row": 11,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 9,
+        "start": 24,
+        "end": 25,
+        "row": 11,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -14928,7 +15022,7 @@
         "style": "Bold"
       },
       {
-        "row": 11,
+        "row": 13,
         "col": 0,
         "n_letters": 16,
         "style": "Bold"
@@ -14936,7 +15030,7 @@
     ],
     "image_maps": {
       "7": "one two.png",
-      "11": "second.png"
+      "13": "second.png"
     },
     "links": [],
     "anchors": []
@@ -14949,7 +15043,9 @@
     "text_lines": [
       "before",
       "",
-      "              [IMAGE]after              ",
+      "                [IMAGE]                 ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -15016,36 +15112,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 4,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 4,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 4,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 4,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 4,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 6,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 4,
+        "start": 22,
+        "end": 23,
+        "row": 6,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 4,
+        "start": 23,
+        "end": 24,
+        "row": 6,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 4,
+        "start": 24,
+        "end": 25,
+        "row": 6,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -15059,7 +15200,7 @@
         "style": "Bold"
       },
       {
-        "row": 6,
+        "row": 8,
         "col": 0,
         "n_letters": 40,
         "style": "Bold"
@@ -15067,7 +15208,7 @@
     ],
     "image_maps": {
       "2": "one two.png",
-      "6": "second.png"
+      "8": "second.png"
     },
     "links": [],
     "anchors": []
@@ -15080,7 +15221,9 @@
     "text_lines": [
       "before",
       "",
-      "              [IMAGE]after              ",
+      "                [IMAGE]                 ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -15147,36 +15290,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 9,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 9,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 9,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 9,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 9,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 11,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 9,
+        "start": 22,
+        "end": 23,
+        "row": 11,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 9,
+        "start": 23,
+        "end": 24,
+        "row": 11,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 9,
+        "start": 24,
+        "end": 25,
+        "row": 11,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -15190,7 +15378,7 @@
         "style": "Bold"
       },
       {
-        "row": 11,
+        "row": 13,
         "col": 0,
         "n_letters": 40,
         "style": "Bold"
@@ -15198,7 +15386,7 @@
     ],
     "image_maps": {
       "7": "one two.png",
-      "11": "second.png"
+      "13": "second.png"
     },
     "links": [],
     "anchors": []
@@ -15211,7 +15399,9 @@
     "text_lines": [
       "before",
       "",
-      "                                   [IMAGE]after                                  ",
+      "                                     [IMAGE]                                     ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -15278,36 +15468,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 4,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 4,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 4,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 4,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 4,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 6,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 4,
+        "start": 22,
+        "end": 23,
+        "row": 6,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 4,
+        "start": 23,
+        "end": 24,
+        "row": 6,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 4,
+        "start": 24,
+        "end": 25,
+        "row": 6,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -15321,7 +15556,7 @@
         "style": "Bold"
       },
       {
-        "row": 6,
+        "row": 8,
         "col": 0,
         "n_letters": 81,
         "style": "Bold"
@@ -15329,7 +15564,7 @@
     ],
     "image_maps": {
       "2": "one two.png",
-      "6": "second.png"
+      "8": "second.png"
     },
     "links": [],
     "anchors": []
@@ -15342,7 +15577,9 @@
     "text_lines": [
       "before",
       "",
-      "                                   [IMAGE]after                                  ",
+      "                                     [IMAGE]                                     ",
+      "",
+      "after",
       "",
       "tail",
       "",
@@ -15409,36 +15646,81 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 20,
-        "end": 21,
+        "start": 15,
+        "end": 16,
         "row": 9,
+        "col": 0,
+        "width": 1,
+        "text": "a"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 9,
+        "col": 1,
+        "width": 1,
+        "text": "f"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 9,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 18,
+        "end": 19,
+        "row": 9,
+        "col": 3,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 19,
+        "end": 20,
+        "row": 9,
+        "col": 4,
+        "width": 1,
+        "text": "r"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 21,
+        "end": 22,
+        "row": 11,
         "col": 0,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 21,
-        "end": 22,
-        "row": 9,
+        "start": 22,
+        "end": 23,
+        "row": 11,
         "col": 1,
         "width": 1,
         "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 22,
-        "end": 23,
-        "row": 9,
+        "start": 23,
+        "end": 24,
+        "row": 11,
         "col": 2,
         "width": 1,
         "text": "i"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 23,
-        "end": 24,
-        "row": 9,
+        "start": 24,
+        "end": 25,
+        "row": 11,
         "col": 3,
         "width": 1,
         "text": "l"
@@ -15452,7 +15734,7 @@
         "style": "Bold"
       },
       {
-        "row": 11,
+        "row": 13,
         "col": 0,
         "n_letters": 81,
         "style": "Bold"
@@ -15460,7 +15742,7 @@
     ],
     "image_maps": {
       "7": "one two.png",
-      "11": "second.png"
+      "13": "second.png"
     },
     "links": [],
     "anchors": []

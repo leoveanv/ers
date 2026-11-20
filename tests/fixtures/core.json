@@ -885,14 +885,15 @@
       "html": "<p>before<img src='one%20two.png'>after<image xlink:href='second.png'/>last<img src='third.png'/></p>",
       "paragraphs": [
         "before",
-        "[IMAGE]after",
+        "[IMAGE]",
+        "after",
         "[IMAGE]",
         "last",
         "[IMAGE]",
         "",
         ""
       ],
-      "canonical": "before\n[IMAGE]after\n[IMAGE]\nlast\n[IMAGE]\n\n"
+      "canonical": "before\n[IMAGE]\nafter\n[IMAGE]\nlast\n[IMAGE]\n\n"
     },
     {
       "name": "breaks",
@@ -1052,11 +1053,12 @@
       "paragraphs": [
         "",
         "[IMAGE]",
+        "",
         "[IMAGE]",
         "end",
         ""
       ],
-      "canonical": "\n[IMAGE]\n[IMAGE]\nend\n"
+      "canonical": "\n[IMAGE]\n\n[IMAGE]\nend\n"
     },
     {
       "name": "quoted-bare-value",

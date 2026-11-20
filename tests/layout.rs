@@ -63,6 +63,42 @@ fn table_before_heading_wraps_as_body_text() {
 }
 
 #[test]
+fn void_image_does_not_absorb_following_paragraph() {
+    let document = parse_document(
+        "article.html",
+        "<figure><picture><img src='chart.png' alt='chart'></picture></figure>\
+         <p>Extrapolating both trends into the next decade raises the prospect of a dramatically larger global effective compute stock.</p>",
+    )
+    .unwrap();
+    for inline_images in [false, true] {
+        let layout = layout_document(&document, LayoutOptions::reader(32, inline_images));
+        let image_row = *layout.image_maps.keys().next().unwrap();
+        assert_eq!(layout.text_lines[image_row].trim(), "[IMAGE]");
+        assert!(
+            layout
+                .text_lines
+                .iter()
+                .all(|line| ers::document::text::cell_width(line) <= 32),
+            "every laid-out line must fit within the reading width"
+        );
+        let text_rows = layout
+            .text_lines
+            .iter()
+            .skip(image_row + layout.text_lines.image_layout().height())
+            .map(|line| line.trim())
+            .filter(|line| !line.is_empty() && *line != "***")
+            .collect::<Vec<_>>();
+        assert_eq!(
+            text_rows.join(" "),
+            "Extrapolating both trends into the next decade raises the prospect of a dramatically larger global effective compute stock."
+        );
+        assert!(layout.source_cells.iter().any(|cell| cell.row
+            >= image_row + layout.text_lines.image_layout().height()
+            && cell.text == "E"));
+    }
+}
+
+#[test]
 fn layout_fixtures_preserve_visible_rows() {
     let fixtures =
         serde_json::from_str::<Vec<LayoutFixture>>(include_str!("fixtures/layouts.json")).unwrap();
