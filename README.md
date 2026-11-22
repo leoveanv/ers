@@ -28,6 +28,7 @@ cargo build --locked --release
 ```sh
 ers /path/to/book.epub
 ers https://example.com/story.html
+ers --refresh https://example.com/story.html
 ers "author or title"
 ers --history
 ers --dump /path/to/book.epub
@@ -39,7 +40,9 @@ Run `ers` without arguments to resume the last book, or provide a history number
 
 Open an HTTP/HTTPS URL to save a local snapshot of its text and supported images. Reopening that URL, including from history, uses the saved snapshot without network requests. Website edits do not change saved articles or move their annotations.
 
-Snapshots live in `~/.config/ers/articles/`, beside `states.db` (or under your configured `XDG_CONFIG_HOME`). Back up both to preserve offline articles and their annotations. Removing an entry from history does not delete its snapshot or annotations. Snapshots do not expire automatically; this release has no refresh command.
+Snapshots live in `~/.config/ers/articles/`, beside `states.db` (or under your configured `XDG_CONFIG_HOME`). Back up both to preserve offline articles and their annotations. Removing an entry from history deletes its cached snapshot when the article has no saved annotations; annotated articles keep their snapshot and annotations. Snapshots do not expire automatically; pass `--refresh` to refetch a URL and replace its cached snapshot.
+
+When `PARALLEL_API_KEY` is set in your environment or a local `.env` file, `ers` fetches non-local web articles as Markdown through Parallel's Extract API instead of parsing raw HTML directly. When unset, `ers` falls back to direct HTML fetching.
 
 The first download attempts to save up to 128 distinct images, within a 128 MiB text-and-image budget and a 30-second image-download budget. Individual resources are limited to 32 MiB. Missing, unsupported, or oversized images do not prevent reading; their previews report that they were not cached. Images loaded only by JavaScript, CSS backgrounds, and `srcset`-only images are not captured. Links to other pages still open in your browser.
 
