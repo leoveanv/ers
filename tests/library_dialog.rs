@@ -14,6 +14,8 @@ fn entry(path: &str) -> LibraryEntry {
         title: Some(path.into()),
         author: Some("Fixture author".into()),
         reading_progress: Some(0.25),
+        category: None,
+        tags: Vec::new(),
     }
 }
 
@@ -303,5 +305,124 @@ fn failed_opening_preserves_the_departing_position() {
     assert!(matches!(
         request(model.handle_key(InputKey::Enter)).command,
         ers::app::requests::LibraryCommand::Switch { .. }
+    ));
+}
+
+#[test]
+fn library_search_filters_by_title_category_and_hash_tags() {
+    use ers::app::modes::library::LibraryPhase;
+    use ers::book::LibraryCategory;
+
+    let mut model = reader();
+    let mut paper = entry("https://arxiv.org/html/2609.21032v1");
+    paper.title = Some("Scaling Discovery".into());
+    paper.author = Some("Jongho Park".into());
+    paper.category = Some(LibraryCategory::Paper);
+    paper.tags = vec!["agents".into(), "ml".into()];
+
+    let mut book = entry("/books/three-body.epub");
+    book.title = Some("The Three-Body Problem".into());
+    book.author = Some("Cixin Liu".into());
+    book.category = Some(LibraryCategory::Book);
+    book.tags = vec!["scifi".into()];
+
+    let job = request(model.handle_key(InputKey::Character('R')));
+    model.library_completed(reply(
+        &job,
+        LibraryReply::Entries(vec![paper.clone(), book]),
+    ));
+
+    model.handle_key(InputKey::Character('/'));
+    assert!(matches!(
+        model.view().mode,
+        ReaderMode::Library(mode) if matches!(mode.phase, LibraryPhase::Searching)
+    ));
+    for ch in "paper #ml".chars() {
+        model.handle_key(InputKey::Character(ch));
+    }
+    model.handle_key(InputKey::Enter);
+
+    let ReaderMode::Library(mode) = model.view().mode else {
+        panic!("library must stay open");
+    };
+    assert!(matches!(mode.phase, LibraryPhase::Browsing));
+    assert_eq!(mode.query, "paper #ml");
+    assert_eq!(mode.visible_entries().len(), 1);
+    assert_eq!(mode.selected_entry().unwrap().filepath, paper.filepath);
+
+    // Escape in browsing clears the active search filter before closing.
+    model.handle_key(InputKey::Escape);
+    let ReaderMode::Library(mode) = model.view().mode else {
+        panic!("clearing query must keep library open");
+    };
+    assert!(mode.query.is_empty());
+    assert_eq!(mode.visible_entries().len(), 2);
+}
+
+#[test]
+fn library_card_tags_and_category_round_trip() {
+    use ers::app::modes::library::LibraryPhase;
+    use ers::app::requests::LibraryCommand;
+    use ers::book::LibraryCategory;
+
+    let mut model = browsing();
+    model.handle_key(InputKey::Down);
+    model.handle_key(InputKey::Character('s'));
+    assert!(matches!(
+        model.view().mode,
+        ReaderMode::Library(mode) if matches!(mode.phase, LibraryPhase::Card)
+    ));
+
+    // Edit tags from card view and verify it returns to card after update.
+    model.handle_key(InputKey::Character('t'));
+    for ch in "#rust, reading".chars() {
+        model.handle_key(InputKey::Character(ch));
+    }
+    let tag_job = request(model.handle_key(InputKey::Enter));
+    assert!(matches!(
+        &tag_job.command,
+        LibraryCommand::UpdateMetadata { path, category: None, tags }
+            if path == "/synthetic/other.epub" && tags == &vec!["rust".to_owned(), "reading".to_owned()]
+    ));
+
+    let mut updated_other = entry("/synthetic/other.epub");
+    updated_other.tags = vec!["rust".into(), "reading".into()];
+    model.library_completed(reply(
+        &tag_job,
+        LibraryReply::MetadataUpdated {
+            path: "/synthetic/other.epub".into(),
+            entries: vec![entry(&model.view().info.path), updated_other.clone()],
+        },
+    ));
+    assert!(matches!(
+        model.view().mode,
+        ReaderMode::Library(mode) if matches!(mode.phase, LibraryPhase::Card)
+    ));
+
+    // Choose category 'webpage' (quick key 'w') from card view.
+    model.handle_key(InputKey::Character('c'));
+    let cat_job = request(model.handle_key(InputKey::Character('w')));
+    assert!(matches!(
+        &cat_job.command,
+        LibraryCommand::UpdateMetadata {
+            path,
+            category: Some(LibraryCategory::Webpage),
+            tags
+        } if path == "/synthetic/other.epub" && tags == &vec!["rust".to_owned(), "reading".to_owned()]
+    ));
+
+    // Closing card with 's' returns to browsing.
+    updated_other.category = Some(LibraryCategory::Webpage);
+    model.library_completed(reply(
+        &cat_job,
+        LibraryReply::MetadataUpdated {
+            path: "/synthetic/other.epub".into(),
+            entries: vec![entry(&model.view().info.path), updated_other],
+        },
+    ));
+    model.handle_key(InputKey::Character('s'));
+    assert!(matches!(
+        model.view().mode,
+        ReaderMode::Library(mode) if matches!(mode.phase, LibraryPhase::Browsing)
     ));
 }

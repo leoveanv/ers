@@ -553,7 +553,7 @@ fn newer_database_schema_is_rejected_without_mutation() {
     let directory = tempdir().unwrap();
     let path = directory.path().join("states.db");
     let connection = Connection::open(&path).unwrap();
-    connection.pragma_update(None, "user_version", 2).unwrap();
+    connection.pragma_update(None, "user_version", 3).unwrap();
     drop(connection);
     let before = std::fs::read(&path).unwrap();
     assert!(Store::open(&path).is_err());
@@ -572,4 +572,108 @@ fn unsupported_database_schema_is_rejected_without_mutation() {
     let before = std::fs::read(&path).unwrap();
     assert!(Store::open(&path).is_err());
     assert_eq!(std::fs::read(&path).unwrap(), before);
+}
+
+#[test]
+fn v1_database_migrates_to_v2_and_preserves_library_metadata() {
+    use ers::book::{LibraryCategory, LibraryEntry};
+
+    let directory = tempdir().unwrap();
+    let path = directory.path().join("states.db");
+    let connection = Connection::open(&path).unwrap();
+    connection
+        .execute_batch(
+            "CREATE TABLE reading_states (
+                filepath TEXT PRIMARY KEY,
+                content_id TEXT NOT NULL,
+                textwidth INTEGER NOT NULL,
+                offset INTEGER NOT NULL,
+                screen_row INTEGER NOT NULL
+            );
+            CREATE TABLE library (
+                last_read DATETIME DEFAULT (datetime('now','localtime')),
+                filepath TEXT PRIMARY KEY,
+                title TEXT,
+                author TEXT,
+                reading_progress REAL,
+                FOREIGN KEY (filepath) REFERENCES reading_states(filepath) ON DELETE CASCADE
+            );
+            CREATE TABLE bookmarks (
+                id TEXT PRIMARY KEY,
+                filepath TEXT,
+                name TEXT,
+                content_id TEXT NOT NULL,
+                textwidth INTEGER NOT NULL,
+                offset INTEGER NOT NULL,
+                screen_row INTEGER NOT NULL,
+                FOREIGN KEY (filepath) REFERENCES reading_states(filepath) ON DELETE CASCADE
+            );
+            CREATE TABLE annotation_books (
+                id TEXT PRIMARY KEY,
+                fingerprint TEXT UNIQUE NOT NULL,
+                title TEXT NOT NULL,
+                author TEXT NOT NULL
+            );
+            CREATE TABLE annotation_locations (
+                path TEXT PRIMARY KEY,
+                book_id TEXT NOT NULL REFERENCES annotation_books(id)
+            );
+            CREATE TABLE annotations (
+                id TEXT PRIMARY KEY,
+                book_id TEXT NOT NULL REFERENCES annotation_books(id),
+                content_order INTEGER NOT NULL,
+                start INTEGER NOT NULL,
+                payload TEXT NOT NULL
+            );
+            CREATE TABLE annotation_exports (
+                book_id TEXT PRIMARY KEY REFERENCES annotation_books(id),
+                path TEXT NOT NULL,
+                digest TEXT,
+                revision INTEGER NOT NULL DEFAULT 0,
+                exported_revision INTEGER NOT NULL DEFAULT -1
+            );
+            INSERT INTO reading_states VALUES ('/legacy/book.epub', 'ch1.xhtml', 80, 12, 0);
+            INSERT INTO library VALUES ('2026-01-01 00:00:00', '/legacy/book.epub', 'Legacy Book', 'Ada', 0.5);",
+        )
+        .unwrap();
+    connection.pragma_update(None, "user_version", 1).unwrap();
+    drop(connection);
+
+    let mut store = Store::open(&path).unwrap();
+    assert_eq!(store.schema_version().unwrap(), 2);
+    let migrated = store.history().unwrap();
+    assert_eq!(migrated.len(), 1);
+    assert_eq!(migrated[0].category, None);
+    assert!(migrated[0].tags.is_empty());
+
+    store
+        .update_library_metadata(
+            "/legacy/book.epub",
+            Some(LibraryCategory::Paper),
+            &["#ml".into(), "systems".into(), "ML".into()],
+        )
+        .unwrap();
+    // Subsequent session saves must preserve user-assigned category and tags.
+    store
+        .save_session(
+            &LibraryEntry {
+                last_read: "2026-02-01 00:00:00".into(),
+                filepath: "/legacy/book.epub".into(),
+                title: Some("Legacy Book".into()),
+                author: Some("Ada".into()),
+                reading_progress: Some(0.75),
+                category: None,
+                tags: Vec::new(),
+            },
+            &reading_state(),
+        )
+        .unwrap();
+
+    let reloaded = Store::open(&path).unwrap().history().unwrap();
+    assert_eq!(reloaded[0].category, Some(LibraryCategory::Paper));
+    assert_eq!(
+        reloaded[0].tags,
+        vec!["ml".to_owned(), "systems".to_owned()]
+    );
+    assert_eq!(reloaded[0].reading_progress, Some(0.75));
 }

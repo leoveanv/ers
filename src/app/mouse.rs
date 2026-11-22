@@ -102,21 +102,21 @@ fn clicked_list_item(click: MouseClick, layout: ListLayout) -> Option<ListHit> {
     let rows = usize::from(click.screen_rows);
     let column = usize::from(click.column);
     let row = usize::from(click.row);
-    let (margin, excluded_rows) = match layout.surface {
-        ListSurface::Dialog => (3, 5),
-        ListSurface::Library => (3, 6),
-        ListSurface::Popup => (2, 4),
+    let (margin, top_row, excluded_rows) = match layout.surface {
+        ListSurface::Dialog => (3, 2, 5),
+        ListSurface::Library => (3, 4, 8),
+        ListSurface::Popup => (2, 2, 4),
     };
     let visible_rows = rows.saturating_sub(excluded_rows);
     if columns <= margin * 2
         || visible_rows == 0
         || !(margin..columns - margin).contains(&column)
-        || !(2..2 + visible_rows).contains(&row)
+        || !(top_row..top_row + visible_rows).contains(&row)
     {
         return None;
     }
     let first = first_visible_item(layout.first, layout.selected, visible_rows);
-    let index = first + row - 2;
+    let index = first + row - top_row;
     (index < layout.item_count).then_some(ListHit { index, first })
 }
 
@@ -232,7 +232,7 @@ impl ReaderModel {
         };
         match &mode.phase {
             LibraryPhase::Browsing => {}
-            LibraryPhase::Waiting { .. }
+            LibraryPhase::Card | LibraryPhase::Waiting { .. }
                 if matches!(
                     action,
                     MouseAction::ScrollUp | MouseAction::ScrollDown | MouseAction::RightClick
@@ -246,12 +246,13 @@ impl ReaderModel {
             _ => return Vec::new(),
         }
         if let MouseAction::LeftClick(click) = action {
+            let count = mode.visible_entries().len();
             return if select_list_item(
                 click,
                 &mut mode.selected,
                 &mut self.list_top,
                 ListItems {
-                    count: mode.entries.len(),
+                    count,
                     surface: ListSurface::Library,
                 },
             ) {

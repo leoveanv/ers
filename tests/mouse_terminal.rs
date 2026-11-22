@@ -26,6 +26,7 @@ const LEFT_PAGE_CLICK: &[u8] = b"\x1b[<0;10;10M\x1b[<0;10;10m";
 const RIGHT_CLICK: &[u8] = b"\x1b[<2;80;10M\x1b[<2;80;10m";
 const FIRST_ITEM_CLICK: &[u8] = b"\x1b[<0;10;3M\x1b[<0;10;3m";
 const SECOND_ITEM_CLICK: &[u8] = b"\x1b[<0;10;4M\x1b[<0;10;4m";
+const SECOND_LIBRARY_ITEM_CLICK: &[u8] = b"\x1b[<0;10;6M\x1b[<0;10;6m";
 const WHEEL_UP: &[u8] = b"\x1b[<64;50;10M";
 const WHEEL_DOWN: &[u8] = b"\x1b[<65;50;10M";
 const CONTROL_WHEEL_UP: &[u8] = b"\x1b[<80;50;10M";
@@ -512,8 +513,8 @@ fn clicking_a_library_item_twice_opens_that_book() {
     let mut reader = fixture.reader();
     reader.send(b"R");
     reader.wait_text("OTHER-LIBRARY-TITLE");
-    reader.send(SECOND_ITEM_CLICK);
-    reader.send(SECOND_ITEM_CLICK);
+    reader.send(SECOND_LIBRARY_ITEM_CLICK);
+    reader.send(SECOND_LIBRARY_ITEM_CLICK);
     reader.wait_text("OTHER-BOOK-TARGET");
     finish(&mut reader);
 }

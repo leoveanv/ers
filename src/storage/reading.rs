@@ -1,6 +1,6 @@
 use super::Store;
 use crate::Result;
-use crate::book::LibraryEntry;
+use crate::book::{LibraryCategory, LibraryEntry, parse_library_tags};
 use crate::reading::ReadingState;
 use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 
@@ -33,19 +33,37 @@ impl Store {
 
     pub fn history(&self) -> Result<Vec<LibraryEntry>> {
         let mut statement = self.connection.prepare(
-            "SELECT last_read, filepath, title, author, reading_progress FROM library ORDER BY last_read DESC",
+            "SELECT last_read, filepath, title, author, reading_progress, category, tags FROM library ORDER BY last_read DESC",
         )?;
         Ok(statement
             .query_map([], |row| {
+                let category_raw: Option<String> = row.get(5)?;
+                let tags_raw: String = row.get(6)?;
                 Ok(LibraryEntry {
                     last_read: row.get(0)?,
                     filepath: row.get(1)?,
                     title: row.get(2)?,
                     author: row.get(3)?,
                     reading_progress: row.get(4)?,
+                    category: category_raw.as_deref().and_then(LibraryCategory::parse),
+                    tags: parse_library_tags(&tags_raw),
                 })
             })?
             .collect::<std::result::Result<Vec<_>, _>>()?)
+    }
+
+    pub fn update_library_metadata(
+        &mut self,
+        path: &str,
+        category: Option<LibraryCategory>,
+        tags: &[String],
+    ) -> Result<()> {
+        let normalized_tags = parse_library_tags(&tags.join(" ")).join(" ");
+        self.connection.execute(
+            "UPDATE library SET category = ?, tags = ? WHERE filepath = ?",
+            params![category.map(LibraryCategory::as_str), normalized_tags, path],
+        )?;
+        Ok(())
     }
 
     pub fn delete_history(&mut self, path: &str) -> Result<()> {
@@ -77,19 +95,25 @@ fn write_reading_position(
 }
 
 fn write_library_entry(connection: &Connection, entry: &LibraryEntry) -> Result<()> {
+    let normalized_tags = parse_library_tags(&entry.tags.join(" ")).join(" ");
     connection.execute(
-            "INSERT INTO library (last_read, filepath, title, author, reading_progress)
-             VALUES (?, ?, ?, ?, ?) ON CONFLICT(filepath) DO UPDATE SET
+        "INSERT INTO library (last_read, filepath, title, author, reading_progress, category, tags)
+             VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(filepath) DO UPDATE SET
              last_read=excluded.last_read, title=excluded.title,
-             author=excluded.author, reading_progress=COALESCE(excluded.reading_progress, library.reading_progress)",
-            params![
-                entry.last_read,
-                entry.filepath,
-                entry.title,
-                entry.author,
-                entry.reading_progress
-            ],
-        )?;
+             author=excluded.author,
+             reading_progress=COALESCE(excluded.reading_progress, library.reading_progress),
+             category=COALESCE(library.category, excluded.category),
+             tags=CASE WHEN library.tags = '' THEN excluded.tags ELSE library.tags END",
+        params![
+            entry.last_read,
+            entry.filepath,
+            entry.title,
+            entry.author,
+            entry.reading_progress,
+            entry.category.map(LibraryCategory::as_str),
+            normalized_tags
+        ],
+    )?;
     Ok(())
 }
 

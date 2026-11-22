@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS library (
     title TEXT,
     author TEXT,
     reading_progress REAL,
+    category TEXT,
+    tags TEXT NOT NULL DEFAULT '',
     FOREIGN KEY (filepath) REFERENCES reading_states(filepath) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS bookmarks (

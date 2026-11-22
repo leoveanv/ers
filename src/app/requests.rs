@@ -1,10 +1,15 @@
-use crate::book::LibraryEntry;
+use crate::book::{LibraryCategory, LibraryEntry};
 use crate::reading::SaveRequest;
 
 #[derive(Clone, Debug)]
 pub enum LibraryCommand {
     List(SaveRequest),
     Remove(String),
+    UpdateMetadata {
+        path: String,
+        category: Option<LibraryCategory>,
+        tags: Vec<String>,
+    },
     Switch {
         path: String,
         departure: SaveRequest,
@@ -15,7 +20,7 @@ impl LibraryCommand {
     pub fn departure(&self) -> Option<&SaveRequest> {
         match self {
             Self::List(departure) | Self::Switch { departure, .. } => Some(departure),
-            Self::Remove(_) => None,
+            Self::Remove(_) | Self::UpdateMetadata { .. } => None,
         }
     }
 }
@@ -30,6 +35,10 @@ pub struct LibraryJob {
 pub enum LibraryReply {
     Entries(Vec<LibraryEntry>),
     Removed {
+        path: String,
+        entries: Vec<LibraryEntry>,
+    },
+    MetadataUpdated {
         path: String,
         entries: Vec<LibraryEntry>,
     },

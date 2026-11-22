@@ -138,6 +138,8 @@ impl BookWorker {
                 title: self.info.metadata.title.clone(),
                 author: self.info.metadata.creator.clone(),
                 reading_progress: request.progress,
+                category: None,
+                tags: Vec::new(),
             },
             &request.position,
         )
@@ -157,6 +159,17 @@ impl BookWorker {
                     remove_cached_web_article(&self.web_cache_directory, &url)?;
                 }
                 Ok(LibraryReply::Removed {
+                    path,
+                    entries: self.store.history()?,
+                })
+            }
+            LibraryCommand::UpdateMetadata {
+                path,
+                category,
+                tags,
+            } => {
+                self.store.update_library_metadata(&path, category, &tags)?;
+                Ok(LibraryReply::MetadataUpdated {
                     path,
                     entries: self.store.history()?,
                 })

@@ -32,6 +32,8 @@ pub fn library_entry(path: &str) -> LibraryEntry {
         title: Some(book().title),
         author: Some(book().author),
         reading_progress: Some(0.125),
+        category: None,
+        tags: Vec::new(),
     }
 }
 

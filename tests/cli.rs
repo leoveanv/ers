@@ -54,6 +54,8 @@ impl CliFixture {
                         title: Some(title.into()),
                         author: Some("Fixture author".into()),
                         reading_progress: Some(0.5),
+                        category: None,
+                        tags: Vec::new(),
                     },
                     &ReadingState {
                         content_id: "OPS/second.xhtml".into(),

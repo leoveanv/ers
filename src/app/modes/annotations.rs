@@ -288,10 +288,11 @@ impl ReaderModel {
     pub fn handle_paste(&mut self, text: &str) {
         self.input_warning = false;
         self.cancel_page_turn();
-        if matches!(
-            self.mode,
-            ReaderMode::Library(_) | ReaderMode::Hyperlinks(_) | ReaderMode::Images(_)
-        ) {
+        if matches!(self.mode, ReaderMode::Library(_)) {
+            self.handle_library_paste(text);
+            return;
+        }
+        if matches!(self.mode, ReaderMode::Hyperlinks(_) | ReaderMode::Images(_)) {
             return;
         }
         if matches!(self.mode, ReaderMode::Dictionary(_)) {

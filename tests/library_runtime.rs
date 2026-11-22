@@ -99,6 +99,8 @@ fn history(path: &Path) -> LibraryEntry {
         title: Some("Saved book".into()),
         author: None,
         reading_progress: Some(0.0),
+        category: None,
+        tags: Vec::new(),
     }
 }
 
@@ -475,4 +477,75 @@ fn canceled_web_switch_cannot_activate_a_late_destination() {
     let before_motion = model.position();
     runtime.handle_key(InputKey::Down);
     assert_ne!(runtime.model.as_ref().unwrap().position(), before_motion);
+}
+
+#[test]
+fn library_category_tags_and_search_persist_to_database() {
+    use ers::book::LibraryCategory;
+
+    let fixture = LibraryFixture::new();
+    let mut runtime = fixture.runtime();
+    menu(&mut runtime);
+
+    // Select the second book, set category to paper, and assign tags.
+    let second_path = fixture.second.to_str().unwrap().to_owned();
+    let destination = {
+        let ReaderMode::Library(mode) = runtime.model.as_ref().unwrap().view().mode else {
+            panic!("library must be open");
+        };
+        mode.entries
+            .iter()
+            .position(|entry| entry.filepath == second_path)
+            .unwrap()
+    };
+    for _ in 0..destination {
+        runtime.handle_key(InputKey::Down);
+    }
+
+    keys(&mut runtime, "c3");
+    wait(&mut runtime, |runtime| {
+        matches!(
+            runtime.model.as_ref().unwrap().view().mode,
+            ReaderMode::Library(mode)
+                if matches!(mode.phase, LibraryPhase::Browsing)
+                    && mode
+                        .selected_entry()
+                        .is_some_and(|entry| entry.category == Some(LibraryCategory::Paper))
+        )
+    });
+
+    keys(&mut runtime, "t");
+    keys(&mut runtime, "research, #ai");
+    runtime.handle_key(InputKey::Enter);
+    wait(&mut runtime, |runtime| {
+        matches!(
+            runtime.model.as_ref().unwrap().view().mode,
+            ReaderMode::Library(mode)
+                if matches!(mode.phase, LibraryPhase::Browsing)
+                    && mode.selected_entry().is_some_and(|entry| {
+                        entry.tags == vec!["research".to_owned(), "ai".to_owned()]
+                    })
+        )
+    });
+
+    // Search for the assigned category and tag, then open the card.
+    keys(&mut runtime, "/paper #ai");
+    runtime.handle_key(InputKey::Enter);
+    keys(&mut runtime, "s");
+    let ReaderMode::Library(mode) = runtime.model.as_ref().unwrap().view().mode else {
+        panic!("library must stay open");
+    };
+    assert!(matches!(mode.phase, LibraryPhase::Card));
+    assert_eq!(mode.visible_entries().len(), 1);
+    assert_eq!(mode.selected_entry().unwrap().filepath, second_path);
+
+    let saved = Store::open(&fixture.database)
+        .unwrap()
+        .history()
+        .unwrap()
+        .into_iter()
+        .find(|entry| entry.filepath == second_path)
+        .unwrap();
+    assert_eq!(saved.category, Some(LibraryCategory::Paper));
+    assert_eq!(saved.tags, vec!["research".to_owned(), "ai".to_owned()]);
 }

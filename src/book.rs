@@ -19,6 +19,58 @@ use percent_encoding::percent_decode_str;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum LibraryCategory {
+    Book,
+    Webpage,
+    Paper,
+}
+
+impl LibraryCategory {
+    pub const ALL: [Self; 3] = [Self::Book, Self::Webpage, Self::Paper];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Book => "book",
+            Self::Webpage => "webpage",
+            Self::Paper => "paper",
+        }
+    }
+
+    pub fn parse(value: &str) -> Option<Self> {
+        match value.trim().to_ascii_lowercase().as_str() {
+            "book" => Some(Self::Book),
+            "webpage" => Some(Self::Webpage),
+            "paper" => Some(Self::Paper),
+            _ => None,
+        }
+    }
+}
+
+pub fn parse_library_tags(input: &str) -> Vec<String> {
+    let mut tags = Vec::new();
+    let mut seen = std::collections::HashSet::new();
+    for token in input.split(|ch: char| ch.is_whitespace() || ch == ',') {
+        let cleaned = token.trim_matches(|ch: char| ch == '#' || ch.is_whitespace());
+        if cleaned.is_empty() {
+            continue;
+        }
+        let key = cleaned.to_lowercase();
+        if seen.insert(key) {
+            tags.push(cleaned.to_owned());
+        }
+    }
+    tags
+}
+
+pub fn format_library_tags(tags: &[String]) -> String {
+    tags.iter()
+        .map(|tag| format!("#{tag}"))
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LibraryEntry {
     pub last_read: String,
@@ -26,6 +78,10 @@ pub struct LibraryEntry {
     pub title: Option<String>,
     pub author: Option<String>,
     pub reading_progress: Option<f64>,
+    #[serde(default)]
+    pub category: Option<LibraryCategory>,
+    #[serde(default)]
+    pub tags: Vec<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
