@@ -112,6 +112,7 @@ struct Mailbox {
 pub struct ReaderJobOptions {
     pub width: usize,
     pub inline_images: bool,
+    pub refresh_web_cache: bool,
 }
 
 pub struct ReaderJobs {
@@ -130,6 +131,7 @@ impl ReaderJobs {
             ReaderJobOptions {
                 width,
                 inline_images: false,
+                refresh_web_cache: false,
             },
         )
     }
@@ -309,6 +311,7 @@ fn run_worker(
         book::BookWorkerOptions {
             cancellation: mailbox.cancellation.clone(),
             inline_images: options.inline_images,
+            refresh_web_cache: options.refresh_web_cache,
         },
     )?;
     let exports = worker.annotation_book.as_ref().map(|book| {

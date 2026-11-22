@@ -53,6 +53,10 @@ struct SubmittedPosition {
 
 impl ReaderRuntime {
     pub fn start(launch: ReaderLaunch) -> Self {
+        Self::start_with_refresh(launch, false)
+    }
+
+    pub fn start_with_refresh(launch: ReaderLaunch, refresh_web_cache: bool) -> Self {
         let spread = if launch.configuration.settings.start_with_double_spread {
             2
         } else {
@@ -66,6 +70,7 @@ impl ReaderRuntime {
                 crate::app::workers::ReaderJobOptions {
                     width,
                     inline_images: launch.configuration.settings.inline_images,
+                    refresh_web_cache,
                 },
             ),
             model: None,
@@ -250,6 +255,7 @@ impl ReaderRuntime {
             crate::app::workers::ReaderJobOptions {
                 width,
                 inline_images: self.configuration.settings.inline_images,
+                refresh_web_cache: false,
             },
         ));
     }

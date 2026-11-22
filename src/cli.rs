@@ -22,6 +22,11 @@ pub struct Arguments {
     pub history: bool,
     #[arg(short = 'd', long, help = "Dump ebook text to standard output")]
     pub dump: bool,
+    #[arg(
+        long,
+        help = "Refetch a web article instead of using the cached snapshot"
+    )]
+    pub refresh: bool,
     #[arg(short = 'v', long, action = clap::ArgAction::Version)]
     pub version: Option<bool>,
     #[arg(value_name = "PATH | # | PATTERN | URL", num_args = 0.., allow_negative_numbers = true)]
@@ -67,7 +72,7 @@ pub fn run(arguments: Arguments, environment: RuntimeEnvironment) -> Result<()> 
         return dump_book(path, &mut std::io::stdout().lock());
     }
     let configuration = Configuration::load(&paths.configuration)?;
-    crate::terminal::read_book(path, paths.database, configuration)
+    crate::terminal::read_book(path, paths.database, configuration, arguments.refresh)
 }
 
 pub fn resolve_target(arguments: &[String], history: &[LibraryEntry]) -> Result<BookLocation> {

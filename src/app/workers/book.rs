@@ -3,7 +3,10 @@ use crate::annotations::AnnotationBook;
 use crate::app::BookInfo;
 use crate::app::requests::{LibraryCommand, LibraryReply};
 use crate::book::LibraryEntry;
-use crate::book::{Book, BookLocation, BookOpenOptions, ParallelExtractConfig, web_resource_url};
+use crate::book::{
+    Book, BookLocation, BookOpenOptions, ParallelExtractConfig, remove_cached_web_article,
+    web_resource_url,
+};
 use crate::cancellation::Cancellation;
 use crate::document::RenderedDocument;
 use crate::document::text::{parse_document, python_whitespace};
@@ -13,12 +16,13 @@ use crate::{Error, Result};
 use sha2::{Digest, Sha256};
 use std::fs::File;
 use std::io::Read;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 pub(super) struct BookWorkerOptions {
     pub cancellation: Cancellation,
     pub inline_images: bool,
+    pub refresh_web_cache: bool,
 }
 
 pub(super) struct BookWorker {
@@ -30,6 +34,7 @@ pub(super) struct BookWorker {
     pub(super) totals: Vec<usize>,
     pub(super) next_total: usize,
     inline_images: bool,
+    web_cache_directory: PathBuf,
 }
 
 impl BookWorker {
@@ -41,11 +46,13 @@ impl BookWorker {
         if let Some(parent) = database.parent() {
             std::fs::create_dir_all(parent)?;
         }
+        let web_cache_directory = database.with_file_name("articles");
         let mut book = Book::open_with_options(
             location.clone(),
             BookOpenOptions {
                 cancellation: options.cancellation,
-                web_cache_directory: Some(database.with_file_name("articles")),
+                web_cache_directory: Some(web_cache_directory.clone()),
+                refresh_web_cache: options.refresh_web_cache,
                 parallel_extract: ParallelExtractConfig::from_env(),
                 ..BookOpenOptions::default()
             },
@@ -96,6 +103,7 @@ impl BookWorker {
             totals,
             next_total: 0,
             inline_images: options.inline_images,
+            web_cache_directory,
         })
     }
 
@@ -143,6 +151,11 @@ impl BookWorker {
             }
             LibraryCommand::Remove(path) => {
                 self.store.delete_history(&path)?;
+                if let Ok(BookLocation::Web(url)) = BookLocation::parse(&path)
+                    && !self.store.has_annotations_for_path(&path)?
+                {
+                    remove_cached_web_article(&self.web_cache_directory, &url)?;
+                }
                 Ok(LibraryReply::Removed {
                     path,
                     entries: self.store.history()?,

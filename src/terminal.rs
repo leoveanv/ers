@@ -43,12 +43,14 @@ struct TerminalLaunch {
     path: BookLocation,
     database: PathBuf,
     configuration: Configuration,
+    refresh_web_cache: bool,
 }
 
 pub fn read_book(
     path: BookLocation,
     database: PathBuf,
     configuration: Configuration,
+    refresh_web_cache: bool,
 ) -> Result<()> {
     let previous_hook = Arc::new(std::panic::take_hook());
     let panic_hook = previous_hook.clone();
@@ -63,6 +65,7 @@ pub fn read_book(
             path,
             database,
             configuration,
+            refresh_web_cache,
         },
         modes,
     );
@@ -155,6 +158,7 @@ fn reader_loop(launch: TerminalLaunch, modes: Arc<std::sync::Mutex<TerminalModes
         path,
         database,
         configuration,
+        refresh_web_cache,
     } = launch;
     let mouse = configuration.settings.mouse_support;
     let browser_preference = std::env::var("BROWSER").ok();
@@ -175,14 +179,17 @@ fn reader_loop(launch: TerminalLaunch, modes: Arc<std::sync::Mutex<TerminalModes
     let image_decoder = std::env::current_exe()?;
     let mut image_options = crate::images::ImageWorkerOptions::new(image_decoder.clone());
     image_options.web_cache_directory = Some(database.with_file_name("articles"));
-    let mut runtime = ReaderRuntime::start(ReaderLaunch {
-        image_decoder: image_decoder.clone(),
-        executables: crate::integrations::ExecutableSearch::capture()?,
-        location: path,
-        database,
-        configuration,
-        viewport: viewport(columns, rows),
-    });
+    let mut runtime = ReaderRuntime::start_with_refresh(
+        ReaderLaunch {
+            image_decoder: image_decoder.clone(),
+            executables: crate::integrations::ExecutableSearch::capture()?,
+            location: path,
+            database,
+            configuration,
+            viewport: viewport(columns, rows),
+        },
+        refresh_web_cache,
+    );
     let mut screen_size = ratatui::layout::Size::new(columns, rows);
     let image_support = ImageSupportDetector::new();
     let support = image_support.detect();

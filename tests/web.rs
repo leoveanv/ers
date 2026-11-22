@@ -704,3 +704,69 @@ fn parallel_extract_fetches_markdown_and_parses_headings_links_and_images() {
     );
 }
 
+#[test]
+fn refresh_web_cache_overwrites_snapshot_and_remove_cleans_unannotated_cache() {
+    use ers::book::remove_cached_web_article;
+
+    let first_body = "<html><head><title>V1</title></head><body><p>Version one.</p></body></html>";
+    let second_body = "<html><head><title>V2</title></head><body><p>Version two.</p></body></html>";
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let address = format!("http://{}", listener.local_addr().unwrap());
+    let server = std::thread::spawn(move || {
+        for body in [first_body, second_body] {
+            let (mut stream, _) = listener.accept().unwrap();
+            let _ = read_request_path(&mut stream);
+            let reply = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                body.len()
+            );
+            let _ = stream.write_all(reply.as_bytes());
+        }
+    });
+
+    let cache_dir = tempdir().unwrap();
+    let url = url::Url::parse(&format!("{address}/article")).unwrap();
+    let location = BookLocation::Web(url.clone());
+
+    let mut first = Book::open_with_options(
+        location.clone(),
+        BookOpenOptions {
+            web_cache_directory: Some(cache_dir.path().to_path_buf()),
+            ..BookOpenOptions::default()
+        },
+    )
+    .unwrap();
+    assert!(first.raw_text("_").unwrap().contains("Version one."));
+
+    let mut refreshed = Book::open_with_options(
+        location.clone(),
+        BookOpenOptions {
+            web_cache_directory: Some(cache_dir.path().to_path_buf()),
+            refresh_web_cache: true,
+            ..BookOpenOptions::default()
+        },
+    )
+    .unwrap();
+    assert!(refreshed.raw_text("_").unwrap().contains("Version two."));
+    server.join().unwrap();
+
+    // Cached snapshot now serves Version two offline.
+    let mut cached = Book::open_with_options(
+        location,
+        BookOpenOptions {
+            web_cache_directory: Some(cache_dir.path().to_path_buf()),
+            ..BookOpenOptions::default()
+        },
+    )
+    .unwrap();
+    assert!(cached.raw_text("_").unwrap().contains("Version two."));
+
+    // Removing the cached web article deletes the ZIP cleanly.
+    remove_cached_web_article(cache_dir.path(), &url).unwrap();
+    assert!(
+        std::fs::read_dir(cache_dir.path())
+            .unwrap()
+            .next()
+            .is_none()
+    );
+}

@@ -129,12 +129,13 @@ impl ArticleCache {
         })
     }
 
-    // #NOTE: Concurrent imports keep the first complete snapshot, including its annotation positions.
+    // #NOTE: Concurrent imports keep the first complete snapshot unless refresh explicitly overwrites it.
     pub fn save(
         &self,
         page: &CachedPage,
         assets: &BTreeMap<String, BookAsset>,
         cancellation: &Cancellation,
+        overwrite: bool,
     ) -> Result<CachedPage> {
         cancellation.check()?;
         let parent = self.path.parent().ok_or_else(|| {
@@ -145,10 +146,15 @@ impl ArticleCache {
         self.write_snapshot(temporary.as_file_mut(), page, assets, cancellation)?;
         temporary.as_file().sync_all()?;
         cancellation.check()?;
-        match temporary.persist_noclobber(&self.path) {
-            Ok(_) => crate::filesystem::sync_parent(&self.path)?,
-            Err(error) if error.error.kind() == std::io::ErrorKind::AlreadyExists => {}
-            Err(error) => return Err(error.error.into()),
+        if overwrite {
+            temporary.persist(&self.path).map_err(|error| error.error)?;
+            crate::filesystem::sync_parent(&self.path)?;
+        } else {
+            match temporary.persist_noclobber(&self.path) {
+                Ok(_) => crate::filesystem::sync_parent(&self.path)?,
+                Err(error) if error.error.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(error) => return Err(error.error.into()),
+            }
         }
         self.load()?
             .ok_or_else(|| Error::Compatibility("The saved article disappeared.".into()))
@@ -187,6 +193,16 @@ impl ArticleCache {
         }
         archive.finish()?;
         Ok(())
+    }
+}
+
+pub(super) fn remove_cached_article(directory: &Path, source: &Url) -> Result<()> {
+    let source = web_resource_url(source);
+    let path = directory.join(format!("{}.zip", digest(source.as_str())));
+    match std::fs::remove_file(&path) {
+        Ok(()) => Ok(()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(error) => Err(error.into()),
     }
 }
 

@@ -42,6 +42,15 @@ impl Store {
         read_annotations(&self.connection, book_id)
     }
 
+    pub fn has_annotations_for_path(&self, path: &str) -> Result<bool> {
+        let count: i64 = self.connection.query_row(
+            "SELECT COUNT(1) FROM annotations a JOIN annotation_locations l ON l.book_id = a.book_id WHERE l.path = ?",
+            [path],
+            |row| row.get(0),
+        )?;
+        Ok(count > 0)
+    }
+
     pub fn save_annotation(&mut self, annotation: &Annotation) -> Result<()> {
         let payload = serde_json::to_string(annotation)?;
         let transaction = self

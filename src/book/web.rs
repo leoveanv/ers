@@ -4,6 +4,10 @@ mod parallel;
 
 pub use parallel::ParallelExtractConfig;
 
+pub fn remove_cached_article(directory: &std::path::Path, url: &Url) -> Result<()> {
+    cache::remove_cached_article(directory, url)
+}
+
 use super::BookMetadata;
 use super::BookNavigation;
 use super::location::{validate_web_url, web_resource_url};
@@ -161,12 +165,16 @@ impl WebBook {
             .web_cache_directory
             .as_ref()
             .map(|directory| ArticleCache::new(directory, url, options.limits));
-        let page = match cache
-            .as_ref()
-            .map(ArticleCache::load)
-            .transpose()?
-            .flatten()
-        {
+        let cached = if options.refresh_web_cache {
+            None
+        } else {
+            cache
+                .as_ref()
+                .map(ArticleCache::load)
+                .transpose()?
+                .flatten()
+        };
+        let page = match cached {
             Some(page) => page,
             None => import_page(&client, url, cache.as_ref(), options)?,
         };
@@ -279,7 +287,12 @@ fn import_page(
         return Ok(page);
     };
     let assets = prefetch_images(client, &page, options)?;
-    cache.save(&page, &assets, &options.cancellation)
+    cache.save(
+        &page,
+        &assets,
+        &options.cancellation,
+        options.refresh_web_cache,
+    )
 }
 
 const IMAGE_PREFETCH_CONCURRENCY: usize = 8;
