@@ -1,6 +1,8 @@
 pub(crate) mod html;
 pub mod layout;
 pub mod links;
+pub mod math;
+pub mod table;
 pub mod text;
 
 use std::collections::BTreeMap;

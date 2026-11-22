@@ -21,6 +21,44 @@ pub struct ImageTarget {
     pub row_offset: isize,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MathTarget {
+    pub content_id: String,
+    pub latex: String,
+    pub rows: usize,
+    pub row_offset: isize,
+}
+
+pub fn math_targets(
+    window: &ReadingWindow,
+    origin: DocumentRow,
+    rows: usize,
+) -> impl Iterator<Item = MathTarget> + '_ {
+    (0..rows).filter_map(move |offset| {
+        let visible = window.row(origin, offset)?;
+        let slots = &visible.document.layout.math_slots;
+        let idx = slots
+            .partition_point(|slot| slot.row <= visible.row)
+            .checked_sub(1)?;
+        let slot = &slots[idx];
+        let row_in_slot = visible.row.checked_sub(slot.row)?;
+        if row_in_slot >= slot.rows {
+            return None;
+        }
+        if offset != 0 && row_in_slot != 0 {
+            return None;
+        }
+        Some(MathTarget {
+            content_id: visible.document.parsed.source.content_id.clone(),
+            latex: slot.latex.clone(),
+            rows: slot.rows,
+            row_offset: isize::try_from(offset)
+                .unwrap_or(isize::MAX)
+                .saturating_sub(isize::try_from(row_in_slot).unwrap_or(isize::MAX)),
+        })
+    })
+}
+
 pub fn visible_images(
     window: &ReadingWindow,
     origin: DocumentRow,

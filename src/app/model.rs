@@ -437,6 +437,17 @@ impl ReaderModel {
         )
     }
 
+    pub fn visible_math(&self) -> impl Iterator<Item = crate::images::MathTarget> + '_ {
+        crate::images::math_targets(
+            &self.window,
+            crate::reading::DocumentRow {
+                document_index: self.rendered.index,
+                row: self.row,
+            },
+            self.viewport.rows * self.spread,
+        )
+    }
+
     fn begin_images(&mut self) -> Vec<ReaderEffect> {
         let targets = self.visible_images().collect();
         ImageState::begin(

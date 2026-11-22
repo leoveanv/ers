@@ -133,6 +133,23 @@ fn load_image(
     decoder: &mut ImageDecoder,
     web_cache_directory: Option<&Path>,
 ) -> Result<ImagePayload> {
+    if let Some(request) = crate::document::math::decode_math_image_path(&target.path) {
+        cancellation.check()?;
+        let bytes = crate::document::math::render_display_png_for_request(&request)?;
+        let decoded = match crate::images::decode_image(
+            &bytes,
+            crate::images::ImageLimits::default(),
+            cancellation,
+        ) {
+            Err(Error::Canceled) => return Err(Error::Canceled),
+            result => result.map_err(|error| error.to_string()),
+        };
+        return Ok(ImagePayload {
+            name: "math.png".into(),
+            bytes,
+            decoded,
+        });
+    }
     let mut book = Book::open_with_options(
         location.clone(),
         BookOpenOptions {
@@ -172,6 +189,14 @@ struct ImageKey {
 
 impl ImageKey {
     fn new(location: &BookLocation, target: &ImageTarget) -> Result<Self> {
+        if crate::document::math::is_math_image_path(&target.path) {
+            return Ok(Self {
+                book: String::new(),
+                content_id: String::new(),
+                path: target.path.clone(),
+                revision: None,
+            });
+        }
         let revision = match location {
             BookLocation::Local(path) => {
                 let metadata = std::fs::metadata(path)?;

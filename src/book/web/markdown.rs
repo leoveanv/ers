@@ -39,6 +39,24 @@ fn normalize_image_links<'a>(events: impl Iterator<Item = Event<'a>>) -> Vec<Eve
                 active_image_link = false;
                 output.push(Event::End(TagEnd::Image));
             }
+            Event::InlineMath(tex) => {
+                let escaped = html_escape::encode_text(&tex);
+                output.push(Event::Html(
+                    format!(
+                        "<math><semantics><annotation encoding=\"application/x-tex\">{escaped}</annotation></semantics></math>"
+                    )
+                    .into(),
+                ));
+            }
+            Event::DisplayMath(tex) => {
+                let escaped = html_escape::encode_text(&tex);
+                output.push(Event::Html(
+                    format!(
+                        "<math display=\"block\"><semantics><annotation encoding=\"application/x-tex\">{escaped}</annotation></semantics></math>"
+                    )
+                    .into(),
+                ));
+            }
 
             other => output.push(other),
         }
@@ -47,8 +65,10 @@ fn normalize_image_links<'a>(events: impl Iterator<Item = Event<'a>>) -> Vec<Eve
 }
 
 pub(super) fn markdown_to_html(markdown: &str, title: Option<&str>) -> String {
-    let options =
-        Options::ENABLE_TABLES | Options::ENABLE_STRIKETHROUGH | Options::ENABLE_TASKLISTS;
+    let options = Options::ENABLE_TABLES
+        | Options::ENABLE_STRIKETHROUGH
+        | Options::ENABLE_TASKLISTS
+        | Options::ENABLE_MATH;
     let events = normalize_image_links(Parser::new_ext(markdown, options));
     let mut body = String::with_capacity(markdown.len());
     pulldown_cmark::html::push_html(&mut body, events.into_iter());
@@ -119,5 +139,24 @@ Regular [article link](https://example.com/post).
                 .iter()
                 .all(|line| crate::document::text::cell_width(line) <= 32)
         );
+    }
+
+    #[test]
+    fn converts_markdown_inline_and_display_math() {
+        let markdown =
+            "Inline $\\alpha + \\beta$ here.\n\n$$\n\\frac{1}{r_{\\mathrm{cog}}} - 1\n$$\n";
+        let html = markdown_to_html(markdown, None);
+        let parsed = parse_document("_", &html).unwrap();
+        assert!(
+            parsed.source.text.contains("Inline α + β here."),
+            "{}",
+            parsed.source.text
+        );
+        assert!(parsed.paragraphs.iter().any(|p| {
+            p.role == crate::document::text::ParagraphRole::Math
+                && p.math_latex
+                    .as_deref()
+                    .is_some_and(|tex| tex.contains(r"\frac{1}"))
+        }));
     }
 }

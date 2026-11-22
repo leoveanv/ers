@@ -30,6 +30,7 @@ impl InlineImageBuilder {
                 cell_width_px: 1,
                 cell_height_px: 2,
                 protocol: self.protocol,
+                upscale: true,
             },
         )
         .unwrap()

@@ -166,6 +166,20 @@ fn dump_book(location: BookLocation, output: &mut impl Write) -> Result<()> {
             crate::document::text::parse_document(&content_id, &book.raw_text(&content_id)?)?
                 .paragraphs
         {
+            if let Some(latex) = paragraph.math_latex.as_deref() {
+                let rendered = crate::document::math::render_display_unicode(latex, 80);
+                if !rendered.is_empty() {
+                    writeln!(output, "{}\n", rendered.join("\n"))?;
+                    continue;
+                }
+            }
+            if let Some(table) = paragraph.table.as_ref() {
+                let rendered = crate::document::table::render_table(table, 80);
+                if !rendered.lines.is_empty() {
+                    writeln!(output, "{}\n", rendered.lines.join("\n"))?;
+                    continue;
+                }
+            }
             writeln!(output, "{}\n", paragraph.raw_text)?;
         }
     }

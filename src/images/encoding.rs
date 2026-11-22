@@ -20,6 +20,7 @@ pub struct ImageEncoding {
     pub cell_width_px: u16,
     pub cell_height_px: u16,
     pub protocol: ImageProtocol,
+    pub upscale: bool,
 }
 
 pub struct PreparedImage {
@@ -96,7 +97,11 @@ pub fn prepare_image(pixels: &DynamicImage, encoding: ImageEncoding) -> Result<P
         (u32::from(encoding.columns.min(cells_max)) * u32::from(encoding.cell_width_px)).min(2048);
     let height =
         (u32::from(encoding.rows.min(cells_max)) * u32::from(encoding.cell_height_px)).min(2048);
-    let resized = pixels.resize(width, height, FilterType::Triangle);
+    let resized = if encoding.upscale || pixels.width() > width || pixels.height() > height {
+        pixels.resize(width, height, FilterType::Triangle)
+    } else {
+        pixels.clone()
+    };
     let size = Size::new(
         resized.width().div_ceil(u32::from(encoding.cell_width_px)) as u16,
         resized

@@ -70,12 +70,20 @@ pub(crate) struct ParagraphStyle {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MathSlot {
+    pub row: usize,
+    pub rows: usize,
+    pub latex: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TextLayout {
     pub content_id: String,
     pub text_lines: TextLines,
     pub source_cells: Vec<SourceCell>,
     pub formatting: Vec<StyleSpan>,
     pub image_maps: BTreeMap<usize, String>,
+    pub math_slots: Vec<MathSlot>,
 }
 
 impl TextLayout {
@@ -226,7 +234,12 @@ fn split_preformatted(value: &str) -> Vec<&str> {
     lines
 }
 
-fn paragraph_lines(paragraph: &Paragraph, text: &str, width: usize) -> RenderedParagraph {
+fn paragraph_lines(
+    paragraph: &Paragraph,
+    text: &str,
+    width: usize,
+    inline_images: bool,
+) -> RenderedParagraph {
     let mut rendered = match paragraph.role {
         ParagraphRole::Heading => RenderedParagraph {
             lines: centered_heading_lines(text, width),
@@ -239,6 +252,14 @@ fn paragraph_lines(paragraph: &Paragraph, text: &str, width: usize) -> RenderedP
             lines: vec![center(text, width)],
             prefix_width: 0,
         },
+        ParagraphRole::Math => math_lines(paragraph, text, width, inline_images),
+        ParagraphRole::Table => RenderedParagraph {
+            lines: paragraph.table.as_ref().map_or_else(
+                || wrap_text(text, width),
+                |table| crate::document::table::render_table(table, width).lines,
+            ),
+            prefix_width: 0,
+        },
         ParagraphRole::Body => RenderedParagraph {
             lines: wrap_text(text, width),
             prefix_width: 0,
@@ -246,6 +267,40 @@ fn paragraph_lines(paragraph: &Paragraph, text: &str, width: usize) -> RenderedP
     };
     rendered.lines.push(String::new());
     rendered
+}
+
+fn math_lines(
+    paragraph: &Paragraph,
+    text: &str,
+    width: usize,
+    inline_images: bool,
+) -> RenderedParagraph {
+    let raw = match paragraph.math_latex.as_deref() {
+        Some(latex) => crate::document::math::render_display_unicode(latex, width),
+        None => wrap_text(text, width),
+    };
+    let mut lines: Vec<String> = raw.into_iter().map(|line| center(&line, width)).collect();
+    if lines.is_empty() {
+        lines.push(String::new());
+    }
+    if inline_images {
+        let target_rows = lines.len().clamp(3, 8);
+        if lines.len() < target_rows {
+            let pad = target_rows - lines.len();
+            let top = pad / 2;
+            let bottom = pad - top;
+            let mut padded = Vec::with_capacity(target_rows);
+            padded.resize(top, String::new());
+            padded.extend(lines);
+            padded.resize(target_rows, String::new());
+            let _ = bottom;
+            lines = padded;
+        }
+    }
+    RenderedParagraph {
+        lines,
+        prefix_width: 0,
+    }
 }
 
 struct CellMapping<'a> {
@@ -347,6 +402,7 @@ struct LayoutDraft {
     formatting: Vec<StyleSpan>,
     image_maps: BTreeMap<usize, String>,
     image_sources: Vec<ImageSource>,
+    math_slots: Vec<MathSlot>,
 }
 
 impl LayoutDraft {
@@ -363,12 +419,16 @@ impl LayoutDraft {
             .into_iter()
             .map(|(row, path)| (images.display_row(row), path))
             .collect();
+        for slot in &mut self.math_slots {
+            slot.row = images.display_row(slot.row);
+        }
         TextLayout {
             content_id: self.content_id,
             text_lines: TextLines::new(self.text_lines, images, options.starting_row),
             source_cells: self.source_cells,
             formatting: self.formatting,
             image_maps,
+            math_slots: self.math_slots,
         }
     }
 }
@@ -381,7 +441,9 @@ pub fn layout_document(document: &ParsedDocument, options: LayoutOptions) -> Tex
         formatting: Vec::new(),
         image_maps: BTreeMap::new(),
         image_sources: Vec::new(),
+        math_slots: Vec::new(),
     };
+    let inline_images = options.image_rows > 1;
     for (index, paragraph) in document.paragraphs.iter().enumerate() {
         if document.suppressed_images.binary_search(&index).is_ok() {
             continue;
@@ -391,10 +453,17 @@ pub fn layout_document(document: &ParsedDocument, options: LayoutOptions) -> Tex
             paragraph.source_start,
             &document.semantics.citations,
         );
-        let RenderedParagraph {
-            lines,
-            prefix_width,
-        } = paragraph_lines(paragraph, &projection.text, options.width);
+        let (lines, prefix_width, table_styles) = if paragraph.role == ParagraphRole::Table
+            && let Some(table) = paragraph.table.as_ref()
+        {
+            let mut rendered = crate::document::table::render_table(table, options.width);
+            rendered.lines.push(String::new());
+            (rendered.lines, 0, rendered.styles)
+        } else {
+            let rendered =
+                paragraph_lines(paragraph, &projection.text, options.width, inline_images);
+            (rendered.lines, rendered.prefix_width, Vec::new())
+        };
         let first_row = options.starting_row + layout.text_lines.len();
         if paragraph.role == ParagraphRole::Heading {
             layout
@@ -420,8 +489,30 @@ pub fn layout_document(document: &ParsedDocument, options: LayoutOptions) -> Tex
                 n_letters: lines[0].chars().count(),
                 style: FontStyle::Bold,
             });
+        } else if paragraph.role == ParagraphRole::Math
+            && let Some(latex) = &paragraph.math_latex
+        {
+            // Exclude the trailing paragraph separator blank line from the math image slot.
+            let slot_rows = lines.len().saturating_sub(1).max(1);
+            layout.math_slots.push(MathSlot {
+                row: first_row,
+                rows: slot_rows,
+                latex: latex.clone(),
+            });
+        } else if paragraph.role == ParagraphRole::Table {
+            layout
+                .formatting
+                .extend(table_styles.into_iter().map(|span| StyleSpan {
+                    row: first_row + span.line,
+                    col: span.col_chars,
+                    n_letters: span.len_chars,
+                    style: span.style,
+                }));
         }
-        if paragraph.role != ParagraphRole::Image {
+        if !matches!(
+            paragraph.role,
+            ParagraphRole::Image | ParagraphRole::Math | ParagraphRole::Table
+        ) {
             layout.source_cells.extend(map_cells(CellMapping {
                 content_id: &document.source.content_id,
                 projection: &projection,

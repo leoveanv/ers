@@ -26,7 +26,7 @@ struct InlineGeometry {
 }
 
 impl InlineGeometry {
-    fn encoding(self, image_id: u32) -> ImageEncoding {
+    fn encoding(self, image_id: u32, upscale: bool) -> ImageEncoding {
         ImageEncoding {
             columns: self.columns,
             rows: self.rows,
@@ -40,6 +40,7 @@ impl InlineGeometry {
             } else {
                 ImageProtocol::Halfblocks
             },
+            upscale,
         }
     }
 
@@ -219,10 +220,12 @@ impl InlineImages {
                 match result.result {
                     Ok(payload) => {
                         let image_id = self.image_ids.allocate();
+                        let upscale =
+                            !crate::document::math::is_math_image_path(&loading.asset.path);
                         let version = self
                             .preparation
                             .get_or_insert_with(ImagePreparation::start)
-                            .request(payload, loading.asset.geometry.encoding(image_id));
+                            .request(payload, loading.asset.geometry.encoding(image_id, upscale));
                         self.pending = Some(PendingImage::Preparing(PreparingImage {
                             asset: loading.asset,
                             version,
@@ -349,7 +352,20 @@ impl InlineImages {
                 let offset = placement.row_offset.saturating_sub(
                     isize::try_from(index * model.view().viewport.rows).unwrap_or(isize::MAX),
                 );
-                if draw_image(frame, image, pane.area, offset) {
+                let clear_underlay =
+                    crate::document::math::is_math_image_path(&placement.asset.path);
+                if draw_image(
+                    frame,
+                    image,
+                    pane.area,
+                    offset,
+                    clear_underlay.then(|| {
+                        (
+                            placement.asset.geometry.rows,
+                            super::render::base_style(model),
+                        )
+                    }),
+                ) {
                     entry.painted.set(true);
                 }
             }
@@ -395,7 +411,7 @@ fn placements(model: &ReaderModel, size: Size, support: ImageSupport) -> Vec<Inl
             .height() as u16,
         support,
     };
-    model
+    let mut list: Vec<InlinePlacement> = model
         .visible_images()
         .take(IMAGES_MAX)
         .map(|target| InlinePlacement {
@@ -407,7 +423,38 @@ fn placements(model: &ReaderModel, size: Size, support: ImageSupport) -> Vec<Inl
             },
             row_offset: target.row_offset,
         })
-        .collect()
+        .collect();
+    // #NOTE: Display math renders as Kitty PNGs on Kitty-capable terminals and falls back to 2D Unicode art elsewhere.
+    if support.kitty && list.len() < IMAGES_MAX {
+        let dark_theme = model.view().color_scheme != 2;
+        let remaining = IMAGES_MAX - list.len();
+        list.extend(model.visible_math().take(remaining).map(|target| {
+            let rows = (target.rows as u16).max(1);
+            let math_geometry = InlineGeometry {
+                columns,
+                rows,
+                support,
+            };
+            let request = crate::document::math::MathImageRequest {
+                latex: target.latex,
+                dark_theme,
+                columns,
+                rows,
+                cell_width_px: support.cell_size.width,
+                cell_height_px: support.cell_size.height,
+            };
+            InlinePlacement {
+                asset: InlineAsset {
+                    book: model.view().info.path.clone(),
+                    content_id: target.content_id,
+                    path: crate::document::math::encode_math_image_path(&request),
+                    geometry: math_geometry,
+                },
+                row_offset: target.row_offset,
+            }
+        }));
+    }
+    list
 }
 
 fn same_placements(left: &[InlinePlacement], right: &[InlinePlacement]) -> bool {
@@ -423,19 +470,43 @@ fn draw_image(
     image: &PreparedInlineImage,
     pane: Rect,
     row_offset: isize,
+    clear_slot: Option<(u16, ratatui::style::Style)>,
 ) -> bool {
     let size = image.protocol.size();
+    let slot_height = clear_slot.map_or(size.height, |(rows, _)| rows.max(size.height));
     if row_offset >= isize::try_from(pane.height).unwrap_or(isize::MAX)
-        || row_offset.saturating_add(isize::try_from(size.height).unwrap_or(isize::MAX)) <= 0
+        || row_offset.saturating_add(isize::try_from(slot_height).unwrap_or(isize::MAX)) <= 0
     {
         return false;
     }
     let top = row_offset.max(0) as u16;
+    let hidden_top = row_offset.min(0).unsigned_abs().min(u16::MAX as usize) as u16;
+    if let Some((rows, style)) = clear_slot {
+        let visible_rows = rows.saturating_sub(hidden_top);
+        let clear_area = Rect::new(
+            pane.x,
+            pane.y.saturating_add(top),
+            pane.width,
+            pane.height.saturating_sub(top).min(visible_rows),
+        )
+        .intersection(frame.area());
+        if !clear_area.is_empty() {
+            let buffer = frame.buffer_mut();
+            for y in clear_area.y..clear_area.y + clear_area.height {
+                for x in clear_area.x..clear_area.x + clear_area.width {
+                    let cell = &mut buffer[(x, y)];
+                    cell.set_symbol(" ");
+                    cell.set_style(style);
+                }
+            }
+        }
+    }
+    let visible_image_height = size.height.saturating_sub(hidden_top);
     let area = Rect::new(
         pane.x,
         pane.y.saturating_add(top),
         pane.width,
-        pane.height.saturating_sub(top).min(size.height),
+        pane.height.saturating_sub(top).min(visible_image_height),
     )
     .intersection(frame.area());
     if area.is_empty() {

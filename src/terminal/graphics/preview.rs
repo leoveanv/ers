@@ -120,6 +120,7 @@ impl ImageRenderer {
                             cell_width_px: key.cell_size.width,
                             cell_height_px: key.cell_size.height,
                             protocol,
+                            upscale: true,
                         },
                     );
             }

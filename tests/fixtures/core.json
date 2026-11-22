@@ -921,10 +921,10 @@
       "name": "superscripts",
       "html": "<p>x<sup>2</sup> y<sub>i</sub> <a href='#note'><sup>1</sup></a></p>",
       "paragraphs": [
-        "x^{2} y_{i} ^{1}",
+        "x² yᵢ ¹",
         ""
       ],
-      "canonical": "x^{2} y_{i} ^{1}\n"
+      "canonical": "x² yᵢ ¹\n"
     },
     {
       "name": "malformed",

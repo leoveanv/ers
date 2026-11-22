@@ -36,6 +36,7 @@ fn prepared_halfblock_images_preserve_the_pixel_color() {
         cell_width_px: 8,
         cell_height_px: 16,
         protocol: ImageProtocol::Halfblocks,
+        upscale: true,
     };
     let prepared = prepare_image(&decoded.pixels, encoding).unwrap();
     let area = Rect::new(0, 0, 20, 10);
@@ -58,6 +59,7 @@ fn prepared_images_fit_the_available_character_cells() {
         cell_width_px: 8,
         cell_height_px: 16,
         protocol: ImageProtocol::Halfblocks,
+        upscale: true,
     };
     let prepared = prepare_image(&decoded.pixels, encoding).unwrap();
     assert_eq!(prepared.protocol.size(), ratatui::layout::Size::new(20, 8));
@@ -80,6 +82,7 @@ fn kitty_previews_fit_the_placeholder_coordinate_range() {
             image_id: 42,
             in_tmux: false,
         },
+        upscale: true,
     };
     let prepared = prepare_image(&decoded.pixels, encoding).unwrap();
     assert_eq!(
@@ -112,6 +115,7 @@ fn tmux_kitty_images_use_a_private_local_file_instead_of_streaming_pixels() {
                 image_id: 42,
                 in_tmux: true,
             },
+            upscale: true,
         },
     )
     .unwrap();
@@ -154,6 +158,7 @@ fn kitty_cleanup_targets_only_the_owned_image() {
             image_id: 42,
             in_tmux: false,
         },
+        upscale: true,
     };
     let prepared = prepare_image(&decoded.pixels, encoding).unwrap();
     assert_eq!(

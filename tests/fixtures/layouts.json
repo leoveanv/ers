@@ -15754,8 +15754,7 @@
     "starting_row": 0,
     "text_lines": [
       "Before [12]",
-      "after x^{2} and",
-      "y_{i}.",
+      "after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -15828,7 +15827,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 7,
         "width": 1,
@@ -15837,7 +15836,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 8,
         "width": 1,
@@ -15846,7 +15845,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 9,
         "width": 1,
@@ -15855,7 +15854,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 10,
         "width": 1,
@@ -15863,8 +15862,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 1,
         "col": 0,
         "width": 1,
@@ -15872,8 +15871,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 1,
         "col": 1,
         "width": 1,
@@ -15881,8 +15880,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 1,
         "col": 2,
         "width": 1,
@@ -15890,8 +15889,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 1,
         "col": 3,
         "width": 1,
@@ -15899,8 +15898,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 1,
         "col": 4,
         "width": 1,
@@ -15908,10 +15907,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 1,
+        "col": 5,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 1,
+        "col": 6,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 1,
+        "col": 7,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 1,
-        "col": 5,
+        "col": 8,
         "width": 1,
         "text": " "
       },
@@ -15920,186 +15946,114 @@
         "start": 19,
         "end": 20,
         "row": 1,
-        "col": 6,
+        "col": 9,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 1,
-        "col": 7,
+        "col": 10,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 1,
-        "col": 8,
+        "col": 11,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 1,
-        "col": 9,
+        "col": 12,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 1,
-        "col": 10,
+        "col": 13,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 1,
-        "col": 11,
+        "col": 14,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 1,
-        "col": 12,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 1,
-        "col": 13,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 1,
-        "col": 14,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 2,
-        "col": 0,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 2,
-        "col": 1,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 2,
-        "col": 2,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 2,
-        "col": 3,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 2,
-        "col": 4,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 2,
-        "col": 5,
+        "col": 15,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
-        "row": 4,
+        "start": 27,
+        "end": 28,
+        "row": 3,
         "col": 0,
         "width": 1,
         "text": "A"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
-        "row": 4,
+        "start": 28,
+        "end": 29,
+        "row": 3,
         "col": 1,
         "width": 1,
         "text": " "
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 4,
+        "start": 29,
+        "end": 30,
+        "row": 3,
         "col": 2,
         "width": 1,
         "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 4,
+        "start": 30,
+        "end": 31,
+        "row": 3,
         "col": 3,
         "width": 1,
         "text": "o"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 4,
+        "start": 31,
+        "end": 32,
+        "row": 3,
         "col": 4,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
-        "row": 4,
+        "start": 32,
+        "end": 33,
+        "row": 3,
         "col": 5,
         "width": 1,
         "text": "e"
@@ -16111,9 +16065,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -16125,7 +16079,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -16136,8 +16090,7 @@
     "starting_row": 5,
     "text_lines": [
       "Before [12]",
-      "after x^{2} and",
-      "y_{i}.",
+      "after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -16210,7 +16163,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 7,
         "width": 1,
@@ -16219,7 +16172,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 8,
         "width": 1,
@@ -16228,7 +16181,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 9,
         "width": 1,
@@ -16237,7 +16190,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 10,
         "width": 1,
@@ -16245,8 +16198,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 6,
         "col": 0,
         "width": 1,
@@ -16254,8 +16207,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 6,
         "col": 1,
         "width": 1,
@@ -16263,8 +16216,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 6,
         "col": 2,
         "width": 1,
@@ -16272,8 +16225,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 6,
         "col": 3,
         "width": 1,
@@ -16281,8 +16234,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 6,
         "col": 4,
         "width": 1,
@@ -16290,10 +16243,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 6,
+        "col": 5,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 6,
+        "col": 6,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 6,
+        "col": 7,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 6,
-        "col": 5,
+        "col": 8,
         "width": 1,
         "text": " "
       },
@@ -16302,186 +16282,114 @@
         "start": 19,
         "end": 20,
         "row": 6,
-        "col": 6,
+        "col": 9,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 6,
-        "col": 7,
+        "col": 10,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 6,
-        "col": 8,
+        "col": 11,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 6,
-        "col": 9,
+        "col": 12,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 6,
-        "col": 10,
+        "col": 13,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 6,
-        "col": 11,
+        "col": 14,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 6,
-        "col": 12,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 6,
-        "col": 13,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 6,
-        "col": 14,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 7,
-        "col": 0,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 7,
-        "col": 1,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 7,
-        "col": 2,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 7,
-        "col": 3,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 7,
-        "col": 4,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 7,
-        "col": 5,
+        "col": 15,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
-        "row": 9,
+        "start": 27,
+        "end": 28,
+        "row": 8,
         "col": 0,
         "width": 1,
         "text": "A"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
-        "row": 9,
+        "start": 28,
+        "end": 29,
+        "row": 8,
         "col": 1,
         "width": 1,
         "text": " "
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 9,
+        "start": 29,
+        "end": 30,
+        "row": 8,
         "col": 2,
         "width": 1,
         "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 9,
+        "start": 30,
+        "end": 31,
+        "row": 8,
         "col": 3,
         "width": 1,
         "text": "o"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 9,
+        "start": 31,
+        "end": 32,
+        "row": 8,
         "col": 4,
         "width": 1,
         "text": "t"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
-        "row": 9,
+        "start": 32,
+        "end": 33,
+        "row": 8,
         "col": 5,
         "width": 1,
         "text": "e"
@@ -16493,9 +16401,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -16507,7 +16415,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -16517,7 +16425,7 @@
     "width": 40,
     "starting_row": 0,
     "text_lines": [
-      "Before [12] after x^{2} and y_{i}.",
+      "Before [12] after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -16590,7 +16498,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 7,
         "width": 1,
@@ -16599,7 +16507,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 8,
         "width": 1,
@@ -16608,7 +16516,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 9,
         "width": 1,
@@ -16617,7 +16525,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 10,
         "width": 1,
@@ -16625,8 +16533,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 12,
-        "end": 13,
+        "start": 9,
+        "end": 10,
         "row": 0,
         "col": 11,
         "width": 1,
@@ -16634,8 +16542,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 0,
         "col": 12,
         "width": 1,
@@ -16643,8 +16551,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 0,
         "col": 13,
         "width": 1,
@@ -16652,8 +16560,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 0,
         "col": 14,
         "width": 1,
@@ -16661,8 +16569,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 0,
         "col": 15,
         "width": 1,
@@ -16670,8 +16578,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 0,
         "col": 16,
         "width": 1,
@@ -16679,10 +16587,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 0,
+        "col": 17,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 0,
+        "col": 18,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 0,
+        "col": 19,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 0,
-        "col": 17,
+        "col": 20,
         "width": 1,
         "text": " "
       },
@@ -16691,149 +16626,68 @@
         "start": 19,
         "end": 20,
         "row": 0,
-        "col": 18,
+        "col": 21,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 0,
-        "col": 19,
+        "col": 22,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 0,
-        "col": 20,
+        "col": 23,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 0,
-        "col": 21,
+        "col": 24,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 0,
-        "col": 22,
+        "col": 25,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 0,
-        "col": 23,
+        "col": 26,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 0,
-        "col": 24,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 0,
-        "col": 25,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 0,
-        "col": 26,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
-        "row": 0,
         "col": 27,
-        "width": 1,
-        "text": " "
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 0,
-        "col": 28,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 0,
-        "col": 29,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 0,
-        "col": 30,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 0,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 0,
-        "col": 32,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 0,
-        "col": 33,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
+        "start": 27,
+        "end": 28,
         "row": 2,
         "col": 0,
         "width": 1,
@@ -16841,8 +16695,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
+        "start": 28,
+        "end": 29,
         "row": 2,
         "col": 1,
         "width": 1,
@@ -16850,8 +16704,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
+        "start": 29,
+        "end": 30,
         "row": 2,
         "col": 2,
         "width": 1,
@@ -16859,8 +16713,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
+        "start": 30,
+        "end": 31,
         "row": 2,
         "col": 3,
         "width": 1,
@@ -16868,8 +16722,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
+        "start": 31,
+        "end": 32,
         "row": 2,
         "col": 4,
         "width": 1,
@@ -16877,8 +16731,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 32,
+        "end": 33,
         "row": 2,
         "col": 5,
         "width": 1,
@@ -16891,9 +16745,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -16905,7 +16759,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -16915,7 +16769,7 @@
     "width": 40,
     "starting_row": 5,
     "text_lines": [
-      "Before [12] after x^{2} and y_{i}.",
+      "Before [12] after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -16988,7 +16842,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 7,
         "width": 1,
@@ -16997,7 +16851,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 8,
         "width": 1,
@@ -17006,7 +16860,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 9,
         "width": 1,
@@ -17015,7 +16869,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 10,
         "width": 1,
@@ -17023,8 +16877,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 12,
-        "end": 13,
+        "start": 9,
+        "end": 10,
         "row": 5,
         "col": 11,
         "width": 1,
@@ -17032,8 +16886,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 5,
         "col": 12,
         "width": 1,
@@ -17041,8 +16895,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 5,
         "col": 13,
         "width": 1,
@@ -17050,8 +16904,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 5,
         "col": 14,
         "width": 1,
@@ -17059,8 +16913,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 5,
         "col": 15,
         "width": 1,
@@ -17068,8 +16922,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 5,
         "col": 16,
         "width": 1,
@@ -17077,10 +16931,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 5,
+        "col": 17,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 5,
+        "col": 18,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 5,
+        "col": 19,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 5,
-        "col": 17,
+        "col": 20,
         "width": 1,
         "text": " "
       },
@@ -17089,149 +16970,68 @@
         "start": 19,
         "end": 20,
         "row": 5,
-        "col": 18,
+        "col": 21,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 5,
-        "col": 19,
+        "col": 22,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 5,
-        "col": 20,
+        "col": 23,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 5,
-        "col": 21,
+        "col": 24,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 5,
-        "col": 22,
+        "col": 25,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 5,
-        "col": 23,
+        "col": 26,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 5,
-        "col": 24,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 5,
-        "col": 25,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 5,
-        "col": 26,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
-        "row": 5,
         "col": 27,
-        "width": 1,
-        "text": " "
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 5,
-        "col": 28,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 5,
-        "col": 29,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 5,
-        "col": 30,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 5,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 5,
-        "col": 32,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 5,
-        "col": 33,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
+        "start": 27,
+        "end": 28,
         "row": 7,
         "col": 0,
         "width": 1,
@@ -17239,8 +17039,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
+        "start": 28,
+        "end": 29,
         "row": 7,
         "col": 1,
         "width": 1,
@@ -17248,8 +17048,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
+        "start": 29,
+        "end": 30,
         "row": 7,
         "col": 2,
         "width": 1,
@@ -17257,8 +17057,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
+        "start": 30,
+        "end": 31,
         "row": 7,
         "col": 3,
         "width": 1,
@@ -17266,8 +17066,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
+        "start": 31,
+        "end": 32,
         "row": 7,
         "col": 4,
         "width": 1,
@@ -17275,8 +17075,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 32,
+        "end": 33,
         "row": 7,
         "col": 5,
         "width": 1,
@@ -17289,9 +17089,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -17303,7 +17103,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -17313,7 +17113,7 @@
     "width": 81,
     "starting_row": 0,
     "text_lines": [
-      "Before [12] after x^{2} and y_{i}.",
+      "Before [12] after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -17386,7 +17186,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 7,
         "width": 1,
@@ -17395,7 +17195,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 8,
         "width": 1,
@@ -17404,7 +17204,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 9,
         "width": 1,
@@ -17413,7 +17213,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 0,
         "col": 10,
         "width": 1,
@@ -17421,8 +17221,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 12,
-        "end": 13,
+        "start": 9,
+        "end": 10,
         "row": 0,
         "col": 11,
         "width": 1,
@@ -17430,8 +17230,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 0,
         "col": 12,
         "width": 1,
@@ -17439,8 +17239,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 0,
         "col": 13,
         "width": 1,
@@ -17448,8 +17248,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 0,
         "col": 14,
         "width": 1,
@@ -17457,8 +17257,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 0,
         "col": 15,
         "width": 1,
@@ -17466,8 +17266,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 0,
         "col": 16,
         "width": 1,
@@ -17475,10 +17275,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 0,
+        "col": 17,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 0,
+        "col": 18,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 0,
+        "col": 19,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 0,
-        "col": 17,
+        "col": 20,
         "width": 1,
         "text": " "
       },
@@ -17487,149 +17314,68 @@
         "start": 19,
         "end": 20,
         "row": 0,
-        "col": 18,
+        "col": 21,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 0,
-        "col": 19,
+        "col": 22,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 0,
-        "col": 20,
+        "col": 23,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 0,
-        "col": 21,
+        "col": 24,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 0,
-        "col": 22,
+        "col": 25,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 0,
-        "col": 23,
+        "col": 26,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 0,
-        "col": 24,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 0,
-        "col": 25,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 0,
-        "col": 26,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
-        "row": 0,
         "col": 27,
-        "width": 1,
-        "text": " "
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 0,
-        "col": 28,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 0,
-        "col": 29,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 0,
-        "col": 30,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 0,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 0,
-        "col": 32,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 0,
-        "col": 33,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
+        "start": 27,
+        "end": 28,
         "row": 2,
         "col": 0,
         "width": 1,
@@ -17637,8 +17383,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
+        "start": 28,
+        "end": 29,
         "row": 2,
         "col": 1,
         "width": 1,
@@ -17646,8 +17392,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
+        "start": 29,
+        "end": 30,
         "row": 2,
         "col": 2,
         "width": 1,
@@ -17655,8 +17401,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
+        "start": 30,
+        "end": 31,
         "row": 2,
         "col": 3,
         "width": 1,
@@ -17664,8 +17410,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
+        "start": 31,
+        "end": 32,
         "row": 2,
         "col": 4,
         "width": 1,
@@ -17673,8 +17419,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 32,
+        "end": 33,
         "row": 2,
         "col": 5,
         "width": 1,
@@ -17687,9 +17433,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -17701,7 +17447,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -17711,7 +17457,7 @@
     "width": 81,
     "starting_row": 5,
     "text_lines": [
-      "Before [12] after x^{2} and y_{i}.",
+      "Before [12] after x² and yᵢ.",
       "",
       "A note",
       "",
@@ -17784,7 +17530,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 7,
         "width": 1,
@@ -17793,7 +17539,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 8,
         "width": 1,
@@ -17802,7 +17548,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 9,
         "width": 1,
@@ -17811,7 +17557,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "row": 5,
         "col": 10,
         "width": 1,
@@ -17819,8 +17565,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 12,
-        "end": 13,
+        "start": 9,
+        "end": 10,
         "row": 5,
         "col": 11,
         "width": 1,
@@ -17828,8 +17574,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 13,
-        "end": 14,
+        "start": 10,
+        "end": 11,
         "row": 5,
         "col": 12,
         "width": 1,
@@ -17837,8 +17583,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 14,
-        "end": 15,
+        "start": 11,
+        "end": 12,
         "row": 5,
         "col": 13,
         "width": 1,
@@ -17846,8 +17592,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 15,
-        "end": 16,
+        "start": 12,
+        "end": 13,
         "row": 5,
         "col": 14,
         "width": 1,
@@ -17855,8 +17601,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 16,
-        "end": 17,
+        "start": 13,
+        "end": 14,
         "row": 5,
         "col": 15,
         "width": 1,
@@ -17864,8 +17610,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 17,
-        "end": 18,
+        "start": 14,
+        "end": 15,
         "row": 5,
         "col": 16,
         "width": 1,
@@ -17873,10 +17619,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 15,
+        "end": 16,
+        "row": 5,
+        "col": 17,
+        "width": 1,
+        "text": " "
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 16,
+        "end": 17,
+        "row": 5,
+        "col": 18,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 17,
+        "end": 18,
+        "row": 5,
+        "col": 19,
+        "width": 1,
+        "text": "²"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 18,
         "end": 19,
         "row": 5,
-        "col": 17,
+        "col": 20,
         "width": 1,
         "text": " "
       },
@@ -17885,149 +17658,68 @@
         "start": 19,
         "end": 20,
         "row": 5,
-        "col": 18,
+        "col": 21,
         "width": 1,
-        "text": "x"
+        "text": "a"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 20,
         "end": 21,
         "row": 5,
-        "col": 19,
+        "col": 22,
         "width": 1,
-        "text": "^"
+        "text": "n"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 21,
         "end": 22,
         "row": 5,
-        "col": 20,
+        "col": 23,
         "width": 1,
-        "text": "{"
+        "text": "d"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 22,
         "end": 23,
         "row": 5,
-        "col": 21,
+        "col": 24,
         "width": 1,
-        "text": "2"
+        "text": " "
       },
       {
         "content_id": "chapter.xhtml",
         "start": 23,
         "end": 24,
         "row": 5,
-        "col": 22,
+        "col": 25,
         "width": 1,
-        "text": "}"
+        "text": "y"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 24,
         "end": 25,
         "row": 5,
-        "col": 23,
+        "col": 26,
         "width": 1,
-        "text": " "
+        "text": "ᵢ"
       },
       {
         "content_id": "chapter.xhtml",
         "start": 25,
         "end": 26,
         "row": 5,
-        "col": 24,
-        "width": 1,
-        "text": "a"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 26,
-        "end": 27,
-        "row": 5,
-        "col": 25,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 27,
-        "end": 28,
-        "row": 5,
-        "col": 26,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
-        "row": 5,
         "col": 27,
-        "width": 1,
-        "text": " "
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
-        "row": 5,
-        "col": 28,
-        "width": 1,
-        "text": "y"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 30,
-        "end": 31,
-        "row": 5,
-        "col": 29,
-        "width": 1,
-        "text": "_"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 31,
-        "end": 32,
-        "row": 5,
-        "col": 30,
-        "width": 1,
-        "text": "{"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 5,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 5,
-        "col": 32,
-        "width": 1,
-        "text": "}"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 5,
-        "col": 33,
         "width": 1,
         "text": "."
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 37,
+        "start": 27,
+        "end": 28,
         "row": 7,
         "col": 0,
         "width": 1,
@@ -18035,8 +17727,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 37,
-        "end": 38,
+        "start": 28,
+        "end": 29,
         "row": 7,
         "col": 1,
         "width": 1,
@@ -18044,8 +17736,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
+        "start": 29,
+        "end": 30,
         "row": 7,
         "col": 2,
         "width": 1,
@@ -18053,8 +17745,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
+        "start": 30,
+        "end": 31,
         "row": 7,
         "col": 3,
         "width": 1,
@@ -18062,8 +17754,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
+        "start": 31,
+        "end": 32,
         "row": 7,
         "col": 4,
         "width": 1,
@@ -18071,8 +17763,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 32,
+        "end": 33,
         "row": 7,
         "col": 5,
         "width": 1,
@@ -18085,9 +17777,9 @@
       {
         "content_id": "chapter.xhtml",
         "start": 7,
-        "end": 12,
+        "end": 9,
         "href": "#note",
-        "label": "^{12}"
+        "label": "¹²"
       }
     ],
     "anchors": [
@@ -18099,7 +17791,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "note",
-        "offset": 36
+        "offset": 27
       }
     ]
   },
@@ -19859,7 +19551,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 1,
         "col": 11,
         "width": 1,
@@ -19868,7 +19560,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 1,
         "col": 12,
         "width": 1,
@@ -19877,7 +19569,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 1,
         "col": 13,
         "width": 1,
@@ -19885,8 +19577,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 2,
         "col": 0,
         "width": 1,
@@ -19894,10 +19586,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 2,
+        "col": 1,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 2,
+        "col": 2,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 2,
+        "col": 3,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 2,
-        "col": 1,
+        "col": 4,
         "width": 1,
         "text": "n"
       },
@@ -19906,41 +19625,14 @@
         "start": 31,
         "end": 32,
         "row": 2,
-        "col": 2,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 2,
-        "col": 3,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 2,
-        "col": 4,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 2,
         "col": 5,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 35,
-        "end": 36,
+        "start": 32,
+        "end": 33,
         "row": 2,
         "col": 6,
         "width": 1,
@@ -19948,10 +19640,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 2,
+        "col": 7,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 2,
+        "col": 8,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 2,
+        "col": 9,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 2,
-        "col": 7,
+        "col": 10,
         "width": 1,
         "text": "e"
       },
@@ -19960,41 +19679,14 @@
         "start": 37,
         "end": 38,
         "row": 2,
-        "col": 8,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 2,
-        "col": 9,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 2,
-        "col": 10,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 2,
         "col": 11,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 2,
         "col": 12,
         "width": 1,
@@ -20002,8 +19694,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 2,
         "col": 13,
         "width": 1,
@@ -20011,8 +19703,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 2,
         "col": 14,
         "width": 1,
@@ -20038,14 +19730,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -20054,7 +19746,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },
@@ -20282,7 +19974,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 6,
         "col": 11,
         "width": 1,
@@ -20291,7 +19983,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 6,
         "col": 12,
         "width": 1,
@@ -20300,7 +19992,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 6,
         "col": 13,
         "width": 1,
@@ -20308,8 +20000,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 7,
         "col": 0,
         "width": 1,
@@ -20317,10 +20009,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 7,
+        "col": 1,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 7,
+        "col": 2,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 7,
+        "col": 3,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 7,
-        "col": 1,
+        "col": 4,
         "width": 1,
         "text": "n"
       },
@@ -20329,41 +20048,14 @@
         "start": 31,
         "end": 32,
         "row": 7,
-        "col": 2,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 7,
-        "col": 3,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 7,
-        "col": 4,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 7,
         "col": 5,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 35,
-        "end": 36,
+        "start": 32,
+        "end": 33,
         "row": 7,
         "col": 6,
         "width": 1,
@@ -20371,10 +20063,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 7,
+        "col": 7,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 7,
+        "col": 8,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 7,
+        "col": 9,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 7,
-        "col": 7,
+        "col": 10,
         "width": 1,
         "text": "e"
       },
@@ -20383,41 +20102,14 @@
         "start": 37,
         "end": 38,
         "row": 7,
-        "col": 8,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 7,
-        "col": 9,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 7,
-        "col": 10,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 7,
         "col": 11,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 7,
         "col": 12,
         "width": 1,
@@ -20425,8 +20117,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 7,
         "col": 13,
         "width": 1,
@@ -20434,8 +20126,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 7,
         "col": 14,
         "width": 1,
@@ -20461,14 +20153,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -20477,7 +20169,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },
@@ -20713,7 +20405,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 24,
         "width": 1,
@@ -20722,7 +20414,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 25,
         "width": 1,
@@ -20731,7 +20423,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 26,
         "width": 1,
@@ -20739,8 +20431,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
+        "start": 25,
+        "end": 26,
         "row": 0,
         "col": 27,
         "width": 1,
@@ -20748,8 +20440,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 0,
         "col": 28,
         "width": 1,
@@ -20757,10 +20449,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 0,
+        "col": 29,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 0,
+        "col": 30,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 0,
+        "col": 31,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 0,
-        "col": 29,
+        "col": 32,
         "width": 1,
         "text": "n"
       },
@@ -20769,43 +20488,43 @@
         "start": 31,
         "end": 32,
         "row": 0,
-        "col": 30,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 0,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 0,
-        "col": 32,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 0,
         "col": 33,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 1,
+        "col": 0,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 1,
+        "col": 1,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 1,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 1,
-        "col": 0,
+        "col": 3,
         "width": 1,
         "text": "e"
       },
@@ -20814,41 +20533,14 @@
         "start": 37,
         "end": 38,
         "row": 1,
-        "col": 1,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 1,
-        "col": 2,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 1,
-        "col": 3,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 1,
         "col": 4,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 1,
         "col": 5,
         "width": 1,
@@ -20856,8 +20548,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 1,
         "col": 6,
         "width": 1,
@@ -20865,8 +20557,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 1,
         "col": 7,
         "width": 1,
@@ -20886,14 +20578,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -20902,7 +20594,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },
@@ -21138,7 +20830,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 24,
         "width": 1,
@@ -21147,7 +20839,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 25,
         "width": 1,
@@ -21156,7 +20848,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 26,
         "width": 1,
@@ -21164,8 +20856,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
+        "start": 25,
+        "end": 26,
         "row": 5,
         "col": 27,
         "width": 1,
@@ -21173,8 +20865,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 5,
         "col": 28,
         "width": 1,
@@ -21182,10 +20874,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 5,
+        "col": 29,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 5,
+        "col": 30,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 5,
+        "col": 31,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 5,
-        "col": 29,
+        "col": 32,
         "width": 1,
         "text": "n"
       },
@@ -21194,43 +20913,43 @@
         "start": 31,
         "end": 32,
         "row": 5,
-        "col": 30,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 5,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 5,
-        "col": 32,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 5,
         "col": 33,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 6,
+        "col": 0,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 6,
+        "col": 1,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 6,
+        "col": 2,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 6,
-        "col": 0,
+        "col": 3,
         "width": 1,
         "text": "e"
       },
@@ -21239,41 +20958,14 @@
         "start": 37,
         "end": 38,
         "row": 6,
-        "col": 1,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 6,
-        "col": 2,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 6,
-        "col": 3,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 6,
         "col": 4,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 6,
         "col": 5,
         "width": 1,
@@ -21281,8 +20973,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 6,
         "col": 6,
         "width": 1,
@@ -21290,8 +20982,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 6,
         "col": 7,
         "width": 1,
@@ -21311,14 +21003,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -21327,7 +21019,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },
@@ -21562,7 +21254,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 24,
         "width": 1,
@@ -21571,7 +21263,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 25,
         "width": 1,
@@ -21580,7 +21272,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 0,
         "col": 26,
         "width": 1,
@@ -21588,8 +21280,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
+        "start": 25,
+        "end": 26,
         "row": 0,
         "col": 27,
         "width": 1,
@@ -21597,8 +21289,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 0,
         "col": 28,
         "width": 1,
@@ -21606,10 +21298,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 0,
+        "col": 29,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 0,
+        "col": 30,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 0,
+        "col": 31,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 0,
-        "col": 29,
+        "col": 32,
         "width": 1,
         "text": "n"
       },
@@ -21618,41 +21337,14 @@
         "start": 31,
         "end": 32,
         "row": 0,
-        "col": 30,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 0,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 0,
-        "col": 32,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 0,
         "col": 33,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 35,
-        "end": 36,
+        "start": 32,
+        "end": 33,
         "row": 0,
         "col": 34,
         "width": 1,
@@ -21660,10 +21352,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 0,
+        "col": 35,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 0,
+        "col": 36,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 0,
+        "col": 37,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 0,
-        "col": 35,
+        "col": 38,
         "width": 1,
         "text": "e"
       },
@@ -21672,41 +21391,14 @@
         "start": 37,
         "end": 38,
         "row": 0,
-        "col": 36,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 0,
-        "col": 37,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 0,
-        "col": 38,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 0,
         "col": 39,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 0,
         "col": 40,
         "width": 1,
@@ -21714,8 +21406,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 0,
         "col": 41,
         "width": 1,
@@ -21723,8 +21415,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 0,
         "col": 42,
         "width": 1,
@@ -21744,14 +21436,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -21760,7 +21452,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },
@@ -21995,7 +21687,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 24,
         "width": 1,
@@ -22004,7 +21696,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 25,
         "width": 1,
@@ -22013,7 +21705,7 @@
       {
         "content_id": "chapter.xhtml",
         "start": 24,
-        "end": 28,
+        "end": 25,
         "row": 5,
         "col": 26,
         "width": 1,
@@ -22021,8 +21713,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 28,
-        "end": 29,
+        "start": 25,
+        "end": 26,
         "row": 5,
         "col": 27,
         "width": 1,
@@ -22030,8 +21722,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 29,
-        "end": 30,
+        "start": 26,
+        "end": 27,
         "row": 5,
         "col": 28,
         "width": 1,
@@ -22039,10 +21731,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 27,
+        "end": 28,
+        "row": 5,
+        "col": 29,
+        "width": 1,
+        "text": "n"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 28,
+        "end": 29,
+        "row": 5,
+        "col": 30,
+        "width": 1,
+        "text": "d"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 29,
+        "end": 30,
+        "row": 5,
+        "col": 31,
+        "width": 1,
+        "text": "i"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 30,
         "end": 31,
         "row": 5,
-        "col": 29,
+        "col": 32,
         "width": 1,
         "text": "n"
       },
@@ -22051,41 +21770,14 @@
         "start": 31,
         "end": 32,
         "row": 5,
-        "col": 30,
-        "width": 1,
-        "text": "d"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 32,
-        "end": 33,
-        "row": 5,
-        "col": 31,
-        "width": 1,
-        "text": "i"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 33,
-        "end": 34,
-        "row": 5,
-        "col": 32,
-        "width": 1,
-        "text": "n"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 34,
-        "end": 35,
-        "row": 5,
         "col": 33,
         "width": 1,
         "text": "g"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 35,
-        "end": 36,
+        "start": 32,
+        "end": 33,
         "row": 5,
         "col": 34,
         "width": 1,
@@ -22093,10 +21785,37 @@
       },
       {
         "content_id": "chapter.xhtml",
+        "start": 33,
+        "end": 34,
+        "row": 5,
+        "col": 35,
+        "width": 1,
+        "text": "e"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 34,
+        "end": 35,
+        "row": 5,
+        "col": 36,
+        "width": 1,
+        "text": "x"
+      },
+      {
+        "content_id": "chapter.xhtml",
+        "start": 35,
+        "end": 36,
+        "row": 5,
+        "col": 37,
+        "width": 1,
+        "text": "t"
+      },
+      {
+        "content_id": "chapter.xhtml",
         "start": 36,
         "end": 37,
         "row": 5,
-        "col": 35,
+        "col": 38,
         "width": 1,
         "text": "e"
       },
@@ -22105,41 +21824,14 @@
         "start": 37,
         "end": 38,
         "row": 5,
-        "col": 36,
-        "width": 1,
-        "text": "x"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 38,
-        "end": 39,
-        "row": 5,
-        "col": 37,
-        "width": 1,
-        "text": "t"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 39,
-        "end": 40,
-        "row": 5,
-        "col": 38,
-        "width": 1,
-        "text": "e"
-      },
-      {
-        "content_id": "chapter.xhtml",
-        "start": 40,
-        "end": 41,
-        "row": 5,
         "col": 39,
         "width": 1,
         "text": "r"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 41,
-        "end": 42,
+        "start": 38,
+        "end": 39,
         "row": 5,
         "col": 40,
         "width": 1,
@@ -22147,8 +21839,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 42,
-        "end": 43,
+        "start": 39,
+        "end": 40,
         "row": 5,
         "col": 41,
         "width": 1,
@@ -22156,8 +21848,8 @@
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 43,
-        "end": 44,
+        "start": 40,
+        "end": 41,
         "row": 5,
         "col": 42,
         "width": 1,
@@ -22177,14 +21869,14 @@
       {
         "content_id": "chapter.xhtml",
         "start": 0,
-        "end": 28,
+        "end": 25,
         "href": "#x",
-        "label": "multi styled label with ^{3}"
+        "label": "multi styled label with ³"
       },
       {
         "content_id": "chapter.xhtml",
-        "start": 36,
-        "end": 44,
+        "start": 33,
+        "end": 41,
         "href": "https://example.org",
         "label": "external"
       }
@@ -22193,7 +21885,7 @@
       {
         "content_id": "chapter.xhtml",
         "fragment": "x",
-        "offset": 45
+        "offset": 42
       }
     ]
   },

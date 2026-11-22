@@ -217,14 +217,16 @@ fn citation_ranges(candidates: BTreeSet<(usize, usize)>, text: &str) -> Vec<Cita
             continue;
         }
         let text = character_slice(text, start, end);
-        let mut label = text.trim_matches(python_whitespace);
+        let mut label = text.trim_matches(python_whitespace).to_owned();
         if let Some(inner) = label
             .strip_prefix("^{")
             .and_then(|value| value.strip_suffix('}'))
         {
-            label = inner;
+            label = inner.to_owned();
+        } else if let Some(decoded) = crate::document::math::decode_superscript_label(&label) {
+            label = decoded;
         }
-        label = label.trim_matches(['[', ']']);
+        let label = label.trim_matches(['[', ']']);
         if !label.is_empty() && !label.contains('\n') {
             result.push(CitationRange {
                 start,

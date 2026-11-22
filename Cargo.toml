@@ -47,6 +47,10 @@ process-wrap = { version = "10.0.1", default-features = false, features = ["toki
 which = "8"
 vte = "0.14"
 pulldown-cmark = { version = "0.13.6", default-features = false, features = ["html"] }
+ratex-parser = { version = "0.1.16", default-features = false }
+ratex-layout = { version = "0.1.16", default-features = false }
+ratex-render = { version = "0.1.16", default-features = false, features = ["embed-fonts"] }
+ratex-types = "0.1.16"
 
 [patch.crates-io]
 crossterm = { path = "vendor/crossterm" }
