@@ -8,7 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::document::links::{DisplayParagraph, project_paragraph};
 use crate::document::text::{
-    Paragraph, ParagraphRole, ParsedDocument, cell_width, graphemes, python_whitespace, wrap_text,
+    Paragraph, ParagraphRole, ParsedDocument, cell_width, clip_text, graphemes, python_whitespace,
+    wrap_text,
 };
 
 #[derive(Clone, Copy, Debug)]
@@ -102,10 +103,115 @@ impl TextLayout {
     }
 }
 
+// #NOTE: Measure control-containing lines per grapheme so a stray control character cannot collapse width to zero and over-pad centered rows.
+fn display_width(value: &str) -> usize {
+    if value
+        .chars()
+        .any(|character| matches!(character, '\u{01}'..='\u{1f}' | '\u{7f}'..='\u{9f}'))
+    {
+        graphemes(value).into_iter().map(cell_width).sum()
+    } else {
+        cell_width(value)
+    }
+}
+
 fn center(value: &str, width: usize) -> String {
-    let margin = width.saturating_sub(value.chars().count());
+    let fitted = if display_width(value) > width {
+        clip_text(value, width)
+    } else {
+        value.into()
+    };
+    let margin = width.saturating_sub(display_width(&fitted));
     let left = margin / 2 + (margin & width & 1);
-    format!("{}{value}{}", " ".repeat(left), " ".repeat(margin - left))
+    format!("{}{fitted}{}", " ".repeat(left), " ".repeat(margin - left))
+}
+
+struct RenderedParagraph {
+    lines: Vec<String>,
+    prefix_width: usize,
+}
+
+fn centered_heading_lines(text: &str, width: usize) -> Vec<String> {
+    let wrapped = wrap_text(text, width);
+    if wrapped.is_empty() {
+        return vec![" ".repeat(width / 2)];
+    }
+    wrapped
+        .into_iter()
+        .map(|line| {
+            let leading = width.saturating_sub(display_width(&line)) / 2;
+            format!("{}{line}", " ".repeat(leading))
+        })
+        .collect()
+}
+
+fn fits_prefixed_wrap(text: &str, inner_width: usize) -> bool {
+    inner_width >= 2 || (inner_width == 1 && text.is_ascii())
+}
+
+fn indented_lines(text: &str, width: usize) -> RenderedParagraph {
+    let inner_width = width.saturating_sub(3);
+    if !fits_prefixed_wrap(text, inner_width) {
+        return RenderedParagraph {
+            lines: wrap_text(text, width),
+            prefix_width: 0,
+        };
+    }
+    RenderedParagraph {
+        lines: wrap_text(text, inner_width)
+            .into_iter()
+            .map(|line| format!("   {line}"))
+            .collect(),
+        prefix_width: 3,
+    }
+}
+
+fn bullet_lines(text: &str, width: usize) -> RenderedParagraph {
+    let inner_width = width.saturating_sub(3);
+    if !fits_prefixed_wrap(text, inner_width) {
+        return RenderedParagraph {
+            lines: wrap_text(text, width),
+            prefix_width: 0,
+        };
+    }
+    let wrapped = wrap_text(text, inner_width);
+    RenderedParagraph {
+        lines: wrapped
+            .iter()
+            .map(|line| {
+                format!(
+                    "{}{line}",
+                    if Some(line) == wrapped.first() {
+                        " - "
+                    } else {
+                        "   "
+                    }
+                )
+            })
+            .collect(),
+        prefix_width: 3,
+    }
+}
+
+fn preformatted_lines(text: &str, width: usize) -> RenderedParagraph {
+    let inner_width = width.saturating_sub(6);
+    if !fits_prefixed_wrap(text, inner_width) {
+        return RenderedParagraph {
+            lines: split_preformatted(text)
+                .into_iter()
+                .flat_map(|line| wrap_text(line, width))
+                .collect(),
+            prefix_width: 0,
+        };
+    }
+    RenderedParagraph {
+        lines: split_preformatted(text)
+            .into_iter()
+            .flat_map(|line| wrap_text(line, inner_width))
+            .map(|line| format!("   {line}"))
+            .collect(),
+        prefix_width: 3,
+    }
 }
 
 fn split_preformatted(value: &str) -> Vec<&str> {
@@ -120,42 +226,26 @@ fn split_preformatted(value: &str) -> Vec<&str> {
     lines
 }
 
-fn paragraph_lines(paragraph: &Paragraph, text: &str, width: usize) -> Vec<String> {
-    let mut lines = match paragraph.role {
-        ParagraphRole::Heading => vec![format!(
-            "{}{text}",
-            " ".repeat(width.saturating_sub(cell_width(text)) / 2)
-        )],
-        ParagraphRole::Indented => wrap_text(text, width.saturating_sub(3))
-            .into_iter()
-            .map(|line| format!("   {line}"))
-            .collect(),
-        ParagraphRole::Bullet => {
-            let wrapped = wrap_text(text, width.saturating_sub(3));
-            wrapped
-                .iter()
-                .map(|line| {
-                    format!(
-                        "{}{line}",
-                        if Some(line) == wrapped.first() {
-                            " - "
-                        } else {
-                            "   "
-                        }
-                    )
-                })
-                .collect()
-        }
-        ParagraphRole::Preformatted => split_preformatted(text)
-            .into_iter()
-            .flat_map(|line| wrap_text(line, width.saturating_sub(6)))
-            .map(|line| format!("   {line}"))
-            .collect(),
-        ParagraphRole::Image => vec![center(text, width)],
-        ParagraphRole::Body => wrap_text(text, width),
+fn paragraph_lines(paragraph: &Paragraph, text: &str, width: usize) -> RenderedParagraph {
+    let mut rendered = match paragraph.role {
+        ParagraphRole::Heading => RenderedParagraph {
+            lines: centered_heading_lines(text, width),
+            prefix_width: 0,
+        },
+        ParagraphRole::Indented => indented_lines(text, width),
+        ParagraphRole::Bullet => bullet_lines(text, width),
+        ParagraphRole::Preformatted => preformatted_lines(text, width),
+        ParagraphRole::Image => RenderedParagraph {
+            lines: vec![center(text, width)],
+            prefix_width: 0,
+        },
+        ParagraphRole::Body => RenderedParagraph {
+            lines: wrap_text(text, width),
+            prefix_width: 0,
+        },
     };
-    lines.push(String::new());
-    lines
+    rendered.lines.push(String::new());
+    rendered
 }
 
 struct CellMapping<'a> {
@@ -301,7 +391,10 @@ pub fn layout_document(document: &ParsedDocument, options: LayoutOptions) -> Tex
             paragraph.source_start,
             &document.semantics.citations,
         );
-        let lines = paragraph_lines(paragraph, &projection.text, options.width);
+        let RenderedParagraph {
+            lines,
+            prefix_width,
+        } = paragraph_lines(paragraph, &projection.text, options.width);
         let first_row = options.starting_row + layout.text_lines.len();
         if paragraph.role == ParagraphRole::Heading {
             layout
@@ -328,30 +421,19 @@ pub fn layout_document(document: &ParsedDocument, options: LayoutOptions) -> Tex
                 style: FontStyle::Bold,
             });
         }
-        let indentation = if matches!(
-            paragraph.role,
-            ParagraphRole::Bullet | ParagraphRole::Indented | ParagraphRole::Preformatted
-        ) {
-            3
-        } else {
-            0
-        };
         if paragraph.role != ParagraphRole::Image {
             layout.source_cells.extend(map_cells(CellMapping {
                 content_id: &document.source.content_id,
                 projection: &projection,
                 rendered: &lines,
                 starting_row: first_row,
-                indentation,
+                indentation: prefix_width,
             }));
         }
-        let left = if matches!(
-            paragraph.role,
-            ParagraphRole::Bullet | ParagraphRole::Indented
-        ) {
-            3
-        } else {
+        let left = if paragraph.role == ParagraphRole::Preformatted {
             0
+        } else {
+            prefix_width
         };
         for span in document.styles.iter().filter(|span| span.row == index) {
             let start = projection.display_offset(paragraph.source_start + span.col);

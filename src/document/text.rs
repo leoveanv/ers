@@ -170,6 +170,10 @@ impl DocumentParser {
         if !matches!(tag.name.as_str(), "img" | "image") {
             self.image_variant = None;
         }
+        // #NOTE: Start a fresh paragraph before headings so preceding unseparated text never inherits heading layout or shifts heading anchors.
+        if !self.hidden && is_heading(&tag.name) && !self.current().text.is_empty() {
+            self.blank();
+        }
         let position = self.position();
         if !self.hidden && !matches!(tag.name.as_str(), "head" | "script" | "style") {
             self.references.start(tag, position)?;
@@ -422,7 +426,8 @@ fn collect_styles(
 }
 
 fn is_heading(tag: &str) -> bool {
-    tag.as_bytes().first() == Some(&b'h')
+    tag.len() == 2
+        && tag.as_bytes().first() == Some(&b'h')
         && tag
             .as_bytes()
             .get(1)

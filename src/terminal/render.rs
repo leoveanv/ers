@@ -282,7 +282,10 @@ fn draw_row(frame: &mut Frame<'_>, paint: RowPaint<'_>) {
         {
             style = style.add_modifier(Modifier::REVERSED | Modifier::BOLD);
         }
-        if width > 0 && x as usize + col + width <= frame.area().width as usize {
+        if width > 0
+            && col + width <= model.view().width
+            && x as usize + col + width <= frame.area().width as usize
+        {
             frame
                 .buffer_mut()
                 .set_stringn(x + col as u16, y, safe_text(cluster), width, style);
