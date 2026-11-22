@@ -10,6 +10,7 @@ pub(crate) mod xml;
 pub use location::BookLocation;
 pub(crate) use location::web_resource_url;
 pub use navigation::{BookNavigation, NavigationPage, NavigationSection, parse_navigation};
+pub use web::ParallelExtractConfig;
 
 use crate::cancellation::Cancellation;
 use crate::{Error, Result};
@@ -75,6 +76,7 @@ pub enum BookKind {
 #[derive(Default)]
 pub struct BookOpenOptions {
     pub web_cache_directory: Option<PathBuf>,
+    pub parallel_extract: Option<ParallelExtractConfig>,
     pub limits: ResourceLimits,
     pub cancellation: Cancellation,
 }

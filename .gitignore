@@ -2,3 +2,4 @@
 /.memory/
 /.pi/
 .DS_Store
+/.env

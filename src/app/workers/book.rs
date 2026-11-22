@@ -3,7 +3,7 @@ use crate::annotations::AnnotationBook;
 use crate::app::BookInfo;
 use crate::app::requests::{LibraryCommand, LibraryReply};
 use crate::book::LibraryEntry;
-use crate::book::{Book, BookLocation, BookOpenOptions, web_resource_url};
+use crate::book::{Book, BookLocation, BookOpenOptions, ParallelExtractConfig, web_resource_url};
 use crate::cancellation::Cancellation;
 use crate::document::RenderedDocument;
 use crate::document::text::{parse_document, python_whitespace};
@@ -46,6 +46,7 @@ impl BookWorker {
             BookOpenOptions {
                 cancellation: options.cancellation,
                 web_cache_directory: Some(database.with_file_name("articles")),
+                parallel_extract: ParallelExtractConfig::from_env(),
                 ..BookOpenOptions::default()
             },
         )?;

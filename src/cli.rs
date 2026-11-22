@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use clap::Parser;
 
 use crate::book::LibraryEntry;
-use crate::book::{Book, BookLocation};
+use crate::book::{Book, BookLocation, BookOpenOptions, ParallelExtractConfig};
 use crate::configuration::{AppPaths, Configuration, PathEnvironment};
 use crate::storage::Store;
 use crate::{Error, Result};
@@ -149,7 +149,13 @@ fn print_history(history: &[LibraryEntry], output: &mut impl Write) -> Result<()
 }
 
 fn dump_book(location: BookLocation, output: &mut impl Write) -> Result<()> {
-    let mut book = Book::open(location)?;
+    let mut book = Book::open_with_options(
+        location,
+        BookOpenOptions {
+            parallel_extract: ParallelExtractConfig::from_env(),
+            ..BookOpenOptions::default()
+        },
+    )?;
     for content_id in book.spine_contents().to_vec() {
         for paragraph in
             crate::document::text::parse_document(&content_id, &book.raw_text(&content_id)?)?

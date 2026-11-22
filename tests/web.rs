@@ -581,3 +581,126 @@ fn image_worker_reads_prefetched_article_images_offline() {
         std::thread::sleep(Duration::from_millis(5));
     }
 }
+
+#[test]
+fn parallel_extract_fetches_markdown_and_parses_headings_links_and_images() {
+    use ers::book::ParallelExtractConfig;
+    use ers::document::layout::{LayoutOptions, layout_document};
+    use ers::document::text::parse_document;
+    use url::Url;
+
+    let image_server = WebServer::start();
+    let image_url = format!("{}/image.png", image_server.address);
+    let markdown = format!(
+        "#### 3\\.B\\.2 Long heading from Parallel Extract that wraps cleanly\n\n\
+         []({image_url})\n\n\
+         Read the [original report](https://example.com/report).\n\n\
+         | Metric | Value |\n| --- | --- |\n| Latency | 0.58s |\n"
+    );
+    let response_json = serde_json::json!({
+        "extract_id": "extract_test",
+        "results": [{
+            "url": "https://example.com/article/",
+            "title": "Parallel Markdown Article",
+            "excerpts": [],
+            "full_content": markdown
+        }],
+        "errors": []
+    })
+    .to_string();
+
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let endpoint = format!("http://{}/v1/extract", listener.local_addr().unwrap());
+    let (tx, rx) = crossbeam_channel::bounded(1);
+    let server = std::thread::spawn(move || {
+        let (mut stream, _) = listener.accept().unwrap();
+        stream
+            .set_read_timeout(Some(Duration::from_secs(2)))
+            .unwrap();
+        let mut request = Vec::new();
+        let mut buffer = [0u8; 1024];
+        loop {
+            let n = stream.read(&mut buffer).unwrap();
+            if n == 0 {
+                break;
+            }
+            request.extend_from_slice(&buffer[..n]);
+            if let Some(pos) = request.windows(4).position(|w| w == b"\r\n\r\n") {
+                let header_text = String::from_utf8_lossy(&request[..pos]);
+                let content_len = header_text
+                    .lines()
+                    .find_map(|line| {
+                        let (k, v) = line.split_once(':')?;
+                        k.eq_ignore_ascii_case("content-length")
+                            .then(|| v.trim().parse::<usize>().ok())
+                            .flatten()
+                    })
+                    .unwrap_or(0);
+                if request.len() >= pos + 4 + content_len {
+                    break;
+                }
+            }
+        }
+        tx.send(String::from_utf8_lossy(&request).into_owned())
+            .unwrap();
+        let reply = format!(
+            "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{response_json}",
+            response_json.len()
+        );
+        stream.write_all(reply.as_bytes()).unwrap();
+    });
+
+    let cache_dir = tempdir().unwrap();
+    let mut book = Book::open_with_options(
+        BookLocation::parse("https://example.com/article/").unwrap(),
+        BookOpenOptions {
+            web_cache_directory: Some(cache_dir.path().to_path_buf()),
+            parallel_extract: Some(ParallelExtractConfig {
+                api_key: "test-parallel-key".into(),
+                endpoint: Url::parse(&endpoint).unwrap(),
+            }),
+            ..BookOpenOptions::default()
+        },
+    )
+    .unwrap();
+    server.join().unwrap();
+
+    let captured = rx.recv_timeout(Duration::from_secs(2)).unwrap();
+    assert!(captured.starts_with("POST /v1/extract HTTP/1.1"));
+    assert!(
+        captured
+            .to_ascii_lowercase()
+            .contains("x-api-key: test-parallel-key")
+    );
+    assert!(captured.contains("\"full_content\":true"));
+
+    assert_eq!(
+        book.metadata().title.as_deref(),
+        Some("Parallel Markdown Article")
+    );
+    let html = book.raw_text("_").unwrap();
+    let parsed = parse_document("_", &html).unwrap();
+    assert!(
+        parsed
+            .paragraphs
+            .iter()
+            .any(|p| p.text == "3.B.2 Long heading from Parallel Extract that wraps cleanly")
+    );
+    assert!(
+        parsed
+            .semantics
+            .links
+            .iter()
+            .any(|link| link.href == "https://example.com/report")
+    );
+    assert_eq!(book.asset(&image_url).unwrap().bytes, b"image");
+
+    let layout = layout_document(&parsed, LayoutOptions::reader(40, false));
+    assert!(
+        layout
+            .text_lines
+            .iter()
+            .all(|line| ers::document::text::cell_width(line) <= 40)
+    );
+}
+

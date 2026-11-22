@@ -1,4 +1,8 @@
 mod cache;
+mod markdown;
+mod parallel;
+
+pub use parallel::ParallelExtractConfig;
 
 use super::BookMetadata;
 use super::BookNavigation;
@@ -208,10 +212,33 @@ fn web_client() -> Result<Client> {
         .map_err(network_error)
 }
 
-fn import_page(
+fn fetch_page_via_parallel(
+    client: &Client,
+    config: &ParallelExtractConfig,
+    url: &Url,
+    options: &BookOpenOptions,
+) -> Result<CachedPage> {
+    options.cancellation.check()?;
+    let limits = FetchLimits {
+        bytes_max: options.limits.resource_bytes_max,
+        timeout: Duration::from_secs(30),
+    };
+    let extracted = runtime()?.block_on(async {
+        tokio::select! {
+            biased;
+            _ = canceled(&options.cancellation) => Err(Error::Canceled),
+            result = parallel::extract_markdown(client, config, url, limits) => result,
+        }
+    })?;
+    Ok(CachedPage {
+        html: markdown::markdown_to_html(&extracted.markdown, extracted.title.as_deref()),
+        base: web_resource_url(&extracted.url),
+    })
+}
+
+fn fetch_page_directly(
     client: &Client,
     url: &Url,
-    cache: Option<&ArticleCache>,
     options: &BookOpenOptions,
 ) -> Result<CachedPage> {
     let response = fetch(
@@ -223,9 +250,25 @@ fn import_page(
         },
         &options.cancellation,
     )?;
-    let page = CachedPage {
+    Ok(CachedPage {
         html: decode_html(&response)?,
         base: web_resource_url(&response.url),
+    })
+}
+
+fn import_page(
+    client: &Client,
+    url: &Url,
+    cache: Option<&ArticleCache>,
+    options: &BookOpenOptions,
+) -> Result<CachedPage> {
+    let page = match options
+        .parallel_extract
+        .as_ref()
+        .filter(|config| parallel::should_use_parallel(config, url))
+    {
+        Some(config) => fetch_page_via_parallel(client, config, url, options)?,
+        None => fetch_page_directly(client, url, options)?,
     };
     if page.html.len() as u64 > options.limits.resource_bytes_max {
         return Err(Error::Compatibility(
@@ -238,6 +281,8 @@ fn import_page(
     let assets = prefetch_images(client, &page, options)?;
     cache.save(&page, &assets, &options.cancellation)
 }
+
+const IMAGE_PREFETCH_CONCURRENCY: usize = 8;
 
 fn prefetch_images(
     client: &Client,
@@ -254,44 +299,93 @@ fn prefetch_images(
         ));
     }
     let document = crate::document::text::parse_document("_", &page.html)?;
-    let deadline = Instant::now() + Duration::from_secs(30);
+    let max_images = IMAGE_COUNT_MAX.min(options.limits.archive_entries_max - 2);
     let mut seen = BTreeSet::new();
-    let mut assets = BTreeMap::new();
+    let mut urls = Vec::new();
     for path in document
         .paragraphs
         .iter()
         .filter_map(|paragraph| paragraph.image_path.as_deref())
     {
-        options.cancellation.check()?;
-        if remaining == 0
-            || seen.len() >= IMAGE_COUNT_MAX.min(options.limits.archive_entries_max - 2)
-        {
+        if seen.len() >= max_images {
             break;
         }
         let Ok(url) = image_url(&page.base, path) else {
             continue;
         };
-        if !seen.insert(url.to_string()) {
-            continue;
-        }
-        let timeout = deadline.saturating_duration_since(Instant::now());
-        if timeout.is_zero() {
-            break;
-        }
-        let limits = FetchLimits {
-            bytes_max: options.limits.resource_bytes_max.min(remaining),
-            timeout,
-        };
-        match fetch_asset(client, &url, limits, &options.cancellation) {
-            Ok(asset) => {
-                remaining -= asset.bytes.len() as u64;
-                assets.insert(url.to_string(), asset);
-            }
-            Err(Error::Canceled) => return Err(Error::Canceled),
-            Err(_) => continue,
+        if seen.insert(url.to_string()) {
+            urls.push(url);
         }
     }
-    Ok(assets)
+    if urls.is_empty() || remaining == 0 {
+        return Ok(BTreeMap::new());
+    }
+    let deadline = Instant::now() + Duration::from_secs(30);
+    let cancellation = &options.cancellation;
+    let resource_bytes_max = options.limits.resource_bytes_max;
+    runtime()?.block_on(async {
+        let mut queue = urls.into_iter();
+        let mut pending = tokio::task::JoinSet::new();
+        let mut assets = BTreeMap::new();
+        loop {
+            cancellation.check()?;
+            while pending.len() < IMAGE_PREFETCH_CONCURRENCY && remaining > 0 {
+                let Some(url) = queue.next() else {
+                    break;
+                };
+                let timeout = deadline.saturating_duration_since(Instant::now());
+                if timeout.is_zero() {
+                    break;
+                }
+                let client = client.clone();
+                let limits = FetchLimits {
+                    bytes_max: resource_bytes_max.min(remaining),
+                    timeout,
+                };
+                pending.spawn(async move {
+                    let key = url.to_string();
+                    let result = request_asset(&client, &url, limits).await;
+                    (key, result)
+                });
+            }
+            if pending.is_empty() {
+                break;
+            }
+            let joined = tokio::select! {
+                biased;
+                _ = canceled(cancellation) => {
+                    pending.abort_all();
+                    return Err(Error::Canceled);
+                }
+                next = pending.join_next() => next,
+            };
+            let Some(Ok((key, result))) = joined else {
+                continue;
+            };
+            if let Ok(asset) = result
+                && asset.bytes.len() as u64 <= remaining
+            {
+                remaining -= asset.bytes.len() as u64;
+                assets.insert(key, asset);
+            }
+        }
+        Ok(assets)
+    })
+}
+
+async fn request_asset(client: &Client, url: &Url, limits: FetchLimits) -> Result<BookAsset> {
+    let response = request(client, url, limits).await?;
+    let name = response
+        .url
+        .path_segments()
+        .and_then(Iterator::last)
+        .filter(|name| !name.is_empty())
+        .unwrap_or("image")
+        .to_owned();
+    Ok(BookAsset {
+        name,
+        bytes: response.bytes,
+    })
 }
 
 fn image_url(base: &Url, path: &str) -> Result<Url> {
